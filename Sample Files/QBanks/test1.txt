@@ -1,4 +1,4 @@
-\begin{type=mcq(4)}
+\begin{type=mcq}
     \begin{question;2.0}
         "When is the lab exam?" \\ "6th May" \\ "8th May" & "28th April" & "3rd May"
     \end{question}
@@ -48,28 +48,28 @@
 
 \begin{type=num}
     \begin{question;2.0}
-        "What date is the lab exam on?" \\ 1 & 10 \\ 6
+        "What date is the lab exam on?" \\ 6
     \end{question}
     \begin{question;2.5}
-        "How many eigenvalues does the 5x5 identity matrix have?" \\ 2 & 7 \\ 5
+        "How many eigenvalues does the 5x5 identity matrix have?" \\ 5
     \end{question}
     \begin{question;3.0}
-        "How many bytes in a kilobyte?" \\ 999 & 1500 \\ 1024
+        "How many bytes in a kilobyte?" \\ 1024
     \end{question}
     \begin{question;3.0}
-        "How many books are there in the Harry Potter series?" \\ 3 & 15 \\ 8
+        "How many books are there in the Harry Potter series?" \\ 8
     \end{question}
     \begin{question;2.5}
-        "How many letters are there in the Hindi varnamala?" \\ 40 & 60 \\ 48
+        "How many letters are there in the Hindi varnamala?" \\ 48
     \end{question}
     \begin{question;1.5}
-        "How many gods are there in the Greek pantheon?" \\ 6 & 15 \\ 12
+        "How many gods are there in the Greek pantheon?" \\ 12
     \end{question}
     \begin{question;2.0}
-        "Which year is it now?" \\ 2000 & 2050 \\ 2021
+        "Which year is it now?" \\ 2021
     \end{question}
     \begin{question;2.5}
-        "What is 17^2?" \\ 250 & 300 \\ 289
+        "What is 17^2?" \\ 289
     \end{question}
 \end{type}
         
