@@ -1,5 +1,4 @@
 #include"adt.h"
-#include<string.h>
 
 NUM* create_NUM(char* text, int ans , float diff)
 {
@@ -8,11 +7,32 @@ NUM* create_NUM(char* text, int ans , float diff)
     strcpy(P->text,text);
     P->ans = ans;
     P->diff = diff;
+    P->score = 0;
     P->next = NULL;
+
+    return P;
 }
 
 NUM* init_NUM()
 {
     NUM* P = create_NUM("",0,0.0f);
+    return P;
+}
+
+MCQ* create_MCQ(char* text, int co_op, int total_op, float diff)
+{
+    MCQ* P = (MCQ*)malloc(sizeof(MCQ));
+    strcpy(P->text,text);
+    P->corr = (char**)malloc(co_op * sizeof(char*));
+    P->wrong = (char**)malloc((total_op - co_op) * sizeof(char*));
+    P->no_ops = total_op;
+    P->diff = diff;
+    P->score = 0;
+    P->next = NULL;
+}
+
+MCQ* init_MCQ()
+{
+    MCQ* P = create_MCQ("",0,0,0.0f);
     return P;
 }
