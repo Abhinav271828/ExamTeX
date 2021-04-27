@@ -34,9 +34,7 @@
     \begin{question;2.002}
         "What kind of coding language is C?8" \\  "functional" &"imperative" \\ "object-oriented" & "object-based"
     \end{question}
-\end{type}
 
-\begin{type=mcq(3)}
     \begin{question;2.0}
         "What kind of coding language is C?" \\ "object-oriented" & "imperative" \\ "functional" 
     \end{question}
@@ -72,9 +70,7 @@
     \begin{question;2.002}
         "What kind of coding language is C?8" \\  "functional" &"imperative" \\ & "object-based"
     \end{question}
-\end{type}
 
-\begin{type=mcq(2)}
     \begin{question;2.0}
         "What kind of coding language is C?" \\ "object-oriented" & "object-based"
     \end{question}
@@ -110,9 +106,7 @@
     \begin{question;2.0}
         "What kind of coding language is C?8" \\ "functional" & "object-based"
     \end{question}
-\end{type}
 
-\begin{type=mcq(5)}
     \begin{question;2.0}
         "What kind of coding language is C?" \\ "object-oriented" & "imperative" \\ "functional" & "object-based" & "a"
     \end{question}
@@ -148,9 +142,7 @@
     \begin{question;5.5}
         "What kind of coding language is C?8" \\ "object-oriented" & "imperative" & "a" \\ "functional" & "object-based"
     \end{question}
-\end{type}
 
-\begin{type=mcq(6)}
     \begin{question;2.0}
         "What kind of coding language is C?" \\ "object-oriented" & "imperative" &"a" &"b" \\ "functional" & "object-based"
     \end{question}
@@ -186,9 +178,7 @@
     \begin{question;2.002}
         "What kind of coding language is C?8" \\  "functional" &"imperative" &"a" &"b"\\ "object-oriented" & "object-based"
     \end{question}
-\end{type}
-
-\begin{type=mcq(7)}
+    
     \begin{question;2.0}
         "What kind of coding language is C?" \\ "object-oriented" & "imperative" &"a" &"b"&"c"\\ "functional" & "object-based"
     \end{question}
@@ -224,10 +214,8 @@
     \begin{question;2.002}
         "What kind of coding language is C?8" \\  "functional" &"imperative" &"a" &"b"&"c"\\ "object-oriented" & "object-based"
     \end{question}
-\end{type}
-
-\begin{type=mcq(8)}
-   \begin{question;2.0}
+    
+    \begin{question;2.0}
         "What kind of coding language is C?" \\ "object-oriented" & "imperative"&"a" &"b"&"c"&"d" \\ "functional" & "object-based"
     \end{question}
     
@@ -262,9 +250,7 @@
     \begin{question;2.002}
         "What kind of coding language is C?8" \\  "functional" &"imperative" &"a" &"b"&"c"&"d"\\ "object-oriented" & "object-based"
     \end{question}
-\end{type}
 
-\begin{type=mcq(9)}
     \begin{question;2.0}
         "What kind of coding language is C?" \\ "object-oriented" & "imperative" &"a" &"b"&"c"&"d" &"e"\\ "functional" & "object-based"
     \end{question}
@@ -300,9 +286,7 @@
     \begin{question;2.002}
         "What kind of coding language is C?8" \\  "functional" &"imperative" &"a" &"b"&"c"&"d" &"e"\\ "object-oriented" & "object-based"
     \end{question}
-\end{type}
-
-\begin{type=mcq(10)}
+    
     \begin{question;2.0}
         "What kind of coding language is C?" \\ "object-oriented" & "imperative" &"a" &"b"&"c"&"d" &"e"&"f"\\ "functional" & "object-based"
     \end{question}
