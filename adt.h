@@ -14,6 +14,11 @@ typedef struct NUM NUM;
 typedef struct Paper Paper;
 typedef struct Request Request;
 
+typedef struct MCQ* ListMCQ;
+typedef struct FITB* ListFITB;
+typedef struct TF* ListTF;
+typedef struct NUM* ListNUM;
+
 //Question bank file; linked list of questions for each type
 struct Bank
 {
@@ -30,7 +35,7 @@ struct MCQ
     char** corr;
     char** wrong;
     int no_ops;
-    float diff;
+    float diff, score;
     float score;
     struct MCQ* next;
 };
@@ -40,7 +45,7 @@ struct FITB
 {
     char* text;
     char* ans;
-    float diff;
+    float diff,score;
     float score;
     struct FITB* next;
 };
@@ -50,7 +55,7 @@ struct TF
 {
     char* text;
     char ans;
-    float diff;
+    float diff, score;
     float score;
     struct TF* next;
 };
@@ -60,7 +65,7 @@ struct NUM
 {
     char* text;
     int ans;
-    float diff;
+    float diff, score;
     float score;
     struct NUM* next;
 };
@@ -78,18 +83,18 @@ struct Paper
 struct Request
 {
     int no_req;
-    float diff_lb;
-    float diff_ub;
+    float diff, score_lb;
+    float diff, score_ub;
     int no_ops;
 };
 
 //Functions
 //Initialisation
-Bank* create_bank();
-MCQ*  create_MCQ();
-FITB* create_FITB();
-TF*   create_TF();
-NUM*  create_NUM();
+Bank* init_bank();
+MCQ*  init_MCQ();
+FITB* init_FITB();
+TF*   init_TF();
+NUM*  init_NUM();
 
 //Parsing QBank
 Bank* parse_bank();
@@ -97,5 +102,17 @@ MCQ*  parse_MCQ();
 FITB* parse_FITB();
 TF*   parse_TF();
 NUM*  parse_NUM();
+
+//Creating nodes
+MCQ* create_MCQ(char* text, int co_op , int total_op , float diff);
+FITB* create_FITB(char* text, char* ans , float diff);
+TF* create_TF(char* text, char ans , float diff);
+NUM* create_NUM(char* text, int ans , float diff);
+
+// Inserting Nodes
+void InsertMCQ(ListMCQ L , MCQ* X);
+void InsertFITB(ListFITB L , FITB* X);
+void InsertTF(ListTF L , TF* X);
+void InsertNUM(ListNUM L , NUM* X);
 
 #endif
