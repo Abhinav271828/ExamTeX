@@ -45,6 +45,7 @@ FITB* P = (FITB*)malloc(sizeof(FITB));
 strcpy(P->text,text); 
 strcpy(P->ans,ans);
 P->diff = diff;
+P->score = 0; 
 P->next = NULL;
 
 }
