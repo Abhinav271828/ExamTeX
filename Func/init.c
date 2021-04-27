@@ -36,3 +36,20 @@ MCQ* init_MCQ()
     MCQ* P = create_MCQ("",0,0,0.0f);
     return P;
 }
+
+FITB* init_FITB(char* text,char* ans,float diff)
+{
+
+FITB* P = (FITB*)malloc(sizeof(FITB));
+
+strcpy(P->text,text); 
+strcpy(P->ans,ans);
+P->diff = diff;
+P->next = NULL;
+
+}
+FITB* create_FITB()
+{
+    FITB* P = create_FITB("","",0.0f);
+    return P;
+}
