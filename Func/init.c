@@ -56,3 +56,21 @@ FITB* init_FITB()
     FITB* P = create_FITB("","",0.0f);
     return P;
 }
+TF* create_TF(char* text, char ans , float diff)
+{
+    TF* P = (TF*)malloc(sizeof(TF));
+
+    strcpy(P->text,text);
+    P->ans = ans;
+    P->diff = diff;
+    P->score = 0;
+    P->next = NULL;
+
+    return P;
+}
+
+TF* init_TF()
+{
+    TF* P = create_TF("",' ',0.0f);
+    return P;
+}
