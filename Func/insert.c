@@ -1,8 +1,5 @@
-void InsertNUM(ListNUM L , char* text , int ans , float diff)
+void InsertNUM(ListNUM L , NUM* X)
 {
-    ListNUM PNew = create_NUM(text,ans,diff);
-        
-    PNew->Next = L->Next;    
-    L->Next = PNew;        
-    
+    X->Next = L->Next;
+    L->Next = X;     
 }
