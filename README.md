@@ -4,7 +4,7 @@ DSA Miniproject, Spring 2021, IIIT Hyderabad
 ## Syntax
 Question Bank:
 
-\begin{type=<type>(params)}
+\begin{type=<type>}
 <list of questions>
 \end{type}
 
