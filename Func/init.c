@@ -29,6 +29,8 @@ MCQ* create_MCQ(char* text, int co_op, int total_op, float diff)
     P->diff = diff;
     P->score = 0;
     P->next = NULL;
+    
+    return P;
 }
 
 MCQ* init_MCQ()
@@ -37,19 +39,19 @@ MCQ* init_MCQ()
     return P;
 }
 
-FITB* init_FITB(char* text,char* ans,float diff)
+FITB* create_FITB(char* text,char* ans,float diff)
 {
+    FITB* P = (FITB*)malloc(sizeof(FITB));
 
-FITB* P = (FITB*)malloc(sizeof(FITB));
+    strcpy(P->text,text); 
+    strcpy(P->ans,ans);
+    P->diff = diff;
+    P->score = 0; 
+    P->next = NULL;
 
-strcpy(P->text,text); 
-strcpy(P->ans,ans);
-P->diff = diff;
-P->score = 0; 
-P->next = NULL;
-
+    return P;
 }
-FITB* create_FITB()
+FITB* init_FITB()
 {
     FITB* P = create_FITB("","",0.0f);
     return P;
