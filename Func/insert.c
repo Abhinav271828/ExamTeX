@@ -10,7 +10,7 @@ void InsertNUM(ListNUM L , NUM* X)
     L->Next = X;     
 }
 
-void InsertMCQ(List MCQ, MCQ* X)
+void InsertMCQ(ListMCQ L, MCQ* X)
 {
     X->Next = L->Next;
     L->Next = X;
