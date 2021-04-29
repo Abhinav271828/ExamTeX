@@ -74,3 +74,14 @@ TF* init_TF()
     TF* P = create_TF("",' ',0.0f);
     return P;
 }
+
+Bank* init_bank()
+{
+    Bank* B = (Bank*)malloc(sizeof(Bank));
+    B->mcq_list = init_MCQ();
+    B->fitb_list = init_FITB();
+    B->tf_list = init_TF();
+    B->num_list = init_NUM();
+
+    return B;
+}
