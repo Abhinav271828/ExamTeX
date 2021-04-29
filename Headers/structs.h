@@ -36,7 +36,6 @@ struct MCQ
     char** wrong;
     int no_ops;
     float diff, score;
-    float score;
     struct MCQ* next;
 };
 
@@ -46,7 +45,6 @@ struct FITB
     char* text;
     char* ans;
     float diff,score;
-    float score;
     struct FITB* next;
 };
 
@@ -56,7 +54,6 @@ struct TF
     char* text;
     char ans;
     float diff, score;
-    float score;
     struct TF* next;
 };
 
@@ -66,7 +63,6 @@ struct NUM
     char* text;
     int ans;
     float diff, score;
-    float score;
     struct NUM* next;
 };
 
@@ -82,8 +78,6 @@ struct Paper
 //Each request in question paper
 struct Request
 {
-    int no_req;
-    float diff, score_lb;
-    float diff, score_ub;
-    int no_ops;
+    int no_req,no_ops;
+    float diff_lb,diff_ub;
 };
