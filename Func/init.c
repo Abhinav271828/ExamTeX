@@ -88,7 +88,7 @@ Paper* init_paper()
 {
     Paper* P = (Paper*)malloc(sizeof(Paper));
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 11; i++)
     {
         init_request(&(P->mcq_reqs[i]));
     }
