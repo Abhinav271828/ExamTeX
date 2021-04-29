@@ -15,3 +15,8 @@ void InsertMCQ(ListMCQ L, MCQ* X)
     X->Next = L->Next;
     L->Next = X;
 }
+void InsertTF(ListTF L , TF* X)
+{
+    X->Next = L->Next;
+    L->Next = X;     
+}
