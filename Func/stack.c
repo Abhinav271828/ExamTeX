@@ -11,3 +11,9 @@ char pop(Stack S)
     S->next = S->next-> next;
     return c;
 }
+Stack create_empty()
+{
+    PtrToNode top;
+    top = NULL;
+    return top;
+}
