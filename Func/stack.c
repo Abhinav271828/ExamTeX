@@ -28,3 +28,8 @@ PtrToNode create_node(char val)
     val1 ->next = NULL;
     return val1;
 }
+
+char top(Stack S)
+{
+    return (S->next->part);
+}
