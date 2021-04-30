@@ -1,5 +1,3 @@
-#include"adt.h"
-
 NUM* create_NUM(char* text, int ans , float diff)
 {
     NUM* P = (NUM*)malloc(sizeof(NUM));
@@ -84,4 +82,28 @@ Bank* init_bank()
     B->num_list = init_NUM();
 
     return B;
+}
+
+Paper* init_paper()
+{
+    Paper* P = (Paper*)malloc(sizeof(Paper));
+
+    for (int i = 0; i < 11; i++)
+    {
+        init_request(&(P->mcq_reqs[i]));
+    }
+
+    init_request(&(P->fitb_reqs));
+    init_request(&(P->tf_reqs));
+    init_request(&(P->num_reqs));
+
+    return P;
+}
+
+void init_request(Request* R)
+{
+    R->no_ops = 0;
+    R->no_req = 0;
+    R->diff_lb = 0.0f;
+    R->diff_ub = 0.0f;
 }

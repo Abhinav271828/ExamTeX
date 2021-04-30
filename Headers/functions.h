@@ -12,6 +12,9 @@ MCQ*  init_MCQ();
 FITB* init_FITB();
 TF*   init_TF();
 NUM*  init_NUM();
+Paper* init_paper();
+void init_request(Request* R);
+
 
 //Creating nodes
 MCQ* create_MCQ(char* text, int co_op , int total_op , float diff);
