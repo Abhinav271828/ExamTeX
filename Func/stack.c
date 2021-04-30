@@ -14,11 +14,9 @@ char pop(Stack S)
 
 Stack create_empty()
 {
-    PtrToNode top;
     PtrToNode temp;
     temp = (PtrToNode)malloc(sizeof(Node));
     temp -> part = ' ';
     temp -> next = NULL;
-    top -> next = temp;
-    return top;
+    return temp;
 }
