@@ -20,3 +20,11 @@ Stack create_empty()
     temp -> next = NULL;
     return temp;
 }
+PtrToNode create_node(char val)
+{
+    Node* val1;
+    val1 = (Node*)malloc(sizeof(Node));
+    val1 -> part = val;
+    val1 ->next = NULL;
+    return val1;
+}
