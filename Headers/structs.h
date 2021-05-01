@@ -34,6 +34,7 @@ struct MCQ
     char* text;
     char** corr;
     char** wrong;
+    int no_corr;
     int no_ops;
     float diff, score;
     struct MCQ* next;
