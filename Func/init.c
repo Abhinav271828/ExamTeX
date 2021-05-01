@@ -1,7 +1,7 @@
 NUM* create_NUM(char* text, int ans , float diff)
 {
     NUM* P = (NUM*)malloc(sizeof(NUM));
-
+    P->text = (char*)malloc(sizeof(MCQ));
     strcpy(P->text,text);
     P->ans = ans;
     P->diff = diff;
@@ -17,13 +17,11 @@ NUM* init_NUM()
     return P;
 }
 
-MCQ* create_MCQ(char* text, int co_op, int total_op, float diff)
+MCQ* create_MCQ(char* text, float diff)
 {
     MCQ* P = (MCQ*)malloc(sizeof(MCQ));
+    P->text = (char*)malloc(strlen(text) * sizeof(char));
     strcpy(P->text,text);
-    P->corr = (char**)malloc(co_op * sizeof(char*));
-    P->wrong = (char**)malloc((total_op - co_op) * sizeof(char*));
-    P->no_ops = total_op;
     P->diff = diff;
     P->score = 0;
     P->next = NULL;
@@ -33,14 +31,15 @@ MCQ* create_MCQ(char* text, int co_op, int total_op, float diff)
 
 MCQ* init_MCQ()
 {
-    MCQ* P = create_MCQ("",0,0,0.0f);
+    MCQ* P = create_MCQ("",0.0f);
     return P;
 }
 
 FITB* create_FITB(char* text,char* ans,float diff)
 {
     FITB* P = (FITB*)malloc(sizeof(FITB));
-
+    P->text = (char*)malloc(strlen(text) * sizeof(char));
+    P->ans = (char*)malloc(strlen(ans) * sizeof(char));
     strcpy(P->text,text); 
     strcpy(P->ans,ans);
     P->diff = diff;
@@ -57,7 +56,7 @@ FITB* init_FITB()
 TF* create_TF(char* text, char ans , float diff)
 {
     TF* P = (TF*)malloc(sizeof(TF));
-
+    P->text = (char*)malloc(sizeof(MCQ));
     strcpy(P->text,text);
     P->ans = ans;
     P->diff = diff;
