@@ -19,5 +19,6 @@ Stack create_empty();
 PtrToNode create_node(char val);
 void push(Stack S, char val);
 char pop(Stack S);
+char top(Stack S);
 
 #endif
