@@ -24,10 +24,10 @@ NUM* create_NUM(char* text, int ans , float diff);
 
 //Parsing QBank
 Bank* parse_bank();
-MCQ*  parse_MCQ();
-FITB* parse_FITB();
-TF*   parse_TF();
-NUM*  parse_NUM();
+ListMCQ  parse_MCQ();
+ListFITB parse_FITB();
+ListTF   parse_TF();
+ListNUM  parse_NUM();
 
 // Inserting nodes in linked list
 void InsertMCQ(ListMCQ L , MCQ* X);
