@@ -23,11 +23,11 @@ TF* create_TF(char* text, char ans , float diff);
 NUM* create_NUM(char* text, int ans , float diff);
 
 //Parsing QBank
-Bank* parse_bank();
-ListMCQ  parse_MCQ();
-ListFITB parse_FITB();
-ListTF   parse_TF();
-ListNUM  parse_NUM();
+Bank* parse_bank(FILE* B);
+ListMCQ  parse_MCQ(FILE* B, Stack part);
+ListFITB parse_FITB(FILE* B, Stack part);
+ListTF   parse_TF(FILE* B, Stack part);
+ListNUM  parse_NUM(FILE* B, Stack part);
 
 // Inserting nodes in linked list
 void InsertMCQ(ListMCQ L , MCQ* X);
