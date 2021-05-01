@@ -17,7 +17,7 @@ void init_request(Request* R);
 
 
 //Creating nodes
-MCQ* create_MCQ(char* text, int co_op , int total_op , float diff);
+MCQ* create_MCQ(char* text, float diff);
 FITB* create_FITB(char* text, char* ans , float diff);
 TF* create_TF(char* text, char ans , float diff);
 NUM* create_NUM(char* text, int ans , float diff);
