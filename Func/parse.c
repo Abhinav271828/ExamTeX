@@ -197,8 +197,8 @@ ListMCQ parse_MCQ(FILE* B, Stack part)
             M->text = (char*)malloc(strlen(text) * sizeof(char));
             strcpy(M->text,text);
     
-            fscanf(B," %s",wd);
-    
+            fscanf(B," %c%c",&wd[0],&wd[1]); wd[2] = '\0';
+
             if (strcmp(wd,"\\\\"))
             {
                 printf("Unrecognised option delimiter\n");
@@ -337,7 +337,6 @@ ListMCQ parse_MCQ(FILE* B, Stack part)
     
         fscanf(B," %c",&c);
     }
-    fclose(B);
 
     return L;
 }
