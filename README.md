@@ -1,5 +1,5 @@
 # ExamTeX
-DSA Miniproject, Spring 2021, IIIT Hyderabad
+DSA Miniproject, Spring 2021, IIIT H
 
 ## Syntax
 Question Bank:
