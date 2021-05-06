@@ -46,4 +46,4 @@ For compiling the program, `cd` into the repo and run the `make` command. To run
     Enter question bank filename: Sample\ Files/QBanks/test1.txt
     Enter question paper filename: Sample\ Files/QPapers/test1.txt
 
-The output file will be generated in the root directory itself.
+The output file will be generated in the PWD.
