@@ -1,8 +1,11 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #ifndef __STACK
 #define __STACK
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+//Header file for stack functionality
 
 typedef struct Node Node;
 typedef struct Node* PtrToNode;
