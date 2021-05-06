@@ -789,10 +789,10 @@ ListNUM parse_NUM(FILE* B, Stack part)
                 fscanf(B,"%c",&c);
             }
             text[pos] = '\0';
-            M->text = (char*)malloc(strlen(text)+1 * sizeof(char));
+            M->text = (char*)malloc((strlen(text)+1) * sizeof(char));
             strcpy(M->text,text);
     
-            fscanf(B," %s",wd);
+            fscanf(B," %c%c",&wd[0],&wd[1]); wd[2] = '\0';
     
             if (strcmp(wd,"\\\\"))
             {
