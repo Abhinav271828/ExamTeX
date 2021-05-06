@@ -29,6 +29,7 @@ ListMCQ  parse_MCQ(FILE* B, Stack part);
 ListFITB parse_FITB(FILE* B, Stack part);
 ListTF   parse_TF(FILE* B, Stack part);
 ListNUM  parse_NUM(FILE* B, Stack part);
+Paper* parse_paper(FILE* P);
 
 // Inserting nodes in linked list
 void InsertMCQ(ListMCQ L , MCQ* X);
