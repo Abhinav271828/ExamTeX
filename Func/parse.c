@@ -45,9 +45,9 @@ Bank* parse_bank(FILE* B)
             fscanf(B,"%c",&c);
             while (c == ' ' || c == '\t' || c == '\n') fscanf(B,"%c",&c);
             fseek(B,-1L,SEEK_CUR);
-            if (!strcmp(wd,"num"))
+            if (!strcmp(wd,"mcq"))
             {
-                bk->num_list = parse_NUM(B,part);
+                bk->mcq_list = parse_MCQ(B,part);
             }
             if (!strcmp(wd,"fitb"))
             {
