@@ -1,3 +1,6 @@
+#include "../Headers/structs.h"
+#include "../Headers/functions.h"
+
 NUM* create_NUM(char* text, int ans , float diff)
 {
     NUM* P = (NUM*)malloc(sizeof(NUM));

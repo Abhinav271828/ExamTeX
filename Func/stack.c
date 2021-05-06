@@ -1,3 +1,5 @@
+#include "../Headers/stack.h"
+
 void push(Stack S, char val)
 {
     PtrToNode new = create_node(val);

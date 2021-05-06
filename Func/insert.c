@@ -1,3 +1,6 @@
+#include "../Headers/structs.h"
+#include "../Headers/functions.h"
+
 void InsertFITB(ListFITB L,FITB* X)
 {
     X->Next = L->Next;

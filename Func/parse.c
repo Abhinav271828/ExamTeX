@@ -1,3 +1,7 @@
+#include "../Headers/structs.h"
+#include "../Headers/functions.h"
+#include "../Headers/stack.h"
+
 Bank* parse_bank(FILE* B)
 {
     Bank* bk = init_bank();
