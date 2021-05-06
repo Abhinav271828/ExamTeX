@@ -832,7 +832,5 @@ ListNUM parse_NUM(FILE* B, Stack part)
     
         fscanf(B," %c",&c);
     }
-    fclose(B);
-
     return L;
 }
