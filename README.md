@@ -23,7 +23,7 @@ for fill in the blanks,
 for numerical,
 
     \begin{question;<diff>}
-    "text" \\ ans
+    "question_text" \\ ans
     \end{question}
 
 for true/false,  
