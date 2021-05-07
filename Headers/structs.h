@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-//Header file defining ADTs
+// Header file defining ADTs
 
 typedef struct Bank Bank;
 typedef struct MCQ MCQ;
@@ -15,60 +15,60 @@ typedef struct NUM NUM;
 typedef struct Paper Paper;
 typedef struct Request Request;
 
-typedef struct MCQ* ListMCQ;
-typedef struct FITB* ListFITB;
-typedef struct TF* ListTF;
-typedef struct NUM* ListNUM;
+typedef struct MCQ *ListMCQ;
+typedef struct FITB *ListFITB;
+typedef struct TF *ListTF;
+typedef struct NUM *ListNUM;
 
-//Question bank file; linked list of questions for each type
+// Question bank file; linked list of questions for each type
 struct Bank
 {
-    struct MCQ* mcq_list;
-    struct FITB* fitb_list;
-    struct TF* tf_list;
-    struct NUM* num_list;
+    struct MCQ *mcq_list;
+    struct FITB *fitb_list;
+    struct TF *tf_list;
+    struct NUM *num_list;
 };
 
-//MCQ type question
+// MCQ type question
 struct MCQ
 {
-    char* text;
-    char** corr;
-    char** wrong;
+    char *text;
+    char **corr;
+    char **wrong;
     int no_corr;
     int no_ops;
     float diff, score;
-    struct MCQ* next;
+    struct MCQ *next;
 };
 
-//Fill in the Blank type question
+// Fill in the Blank type question
 struct FITB
 {
-    char* text;
-    char* ans;
-    float diff,score;
-    struct FITB* next;
+    char *text;
+    char *ans;
+    float diff, score;
+    struct FITB *next;
 };
 
-//True/False type question
+// True/False type question
 struct TF
 {
-    char* text;
+    char *text;
     char ans;
     float diff, score;
-    struct TF* next;
+    struct TF *next;
 };
 
-//Numerical type question
+// Numerical type question
 struct NUM
 {
-    char* text;
+    char *text;
     int ans;
     float diff, score;
-    struct NUM* next;
+    struct NUM *next;
 };
 
-//Question paper file; list of requests, one for each type
+// Question paper file; list of requests, one for each type
 struct Paper
 {
     struct Request mcq_reqs[10];
@@ -77,9 +77,9 @@ struct Paper
     struct Request num_reqs;
 };
 
-//Each request in question paper
+// Each request in question paper
 struct Request
 {
-    int no_req,no_ops;
-    float diff_lb,diff_ub;
+    int no_req, no_ops;
+    float diff_lb, diff_ub;
 };
