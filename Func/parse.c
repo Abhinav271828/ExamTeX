@@ -981,7 +981,7 @@ ListTF parse_TF(FILE* B, Stack part)
                 exit(0);
             }
             
-            fscanf(B," %d",&ans);
+            fscanf(B," %c",&ans);
             M->ans = ans;
             
             InsertTF(L,M);
