@@ -370,8 +370,9 @@ Paper *parse_paper(FILE *P)
     Stack brack = create_empty();
     char wd[10];
     fscanf(B, "%c", &c);
-    while (c != EOF)
+    while (1)
     {
+        if (c == '}') break;
         if (c != '\\')
         {
             printf("Unrecognised beginning character\n");
