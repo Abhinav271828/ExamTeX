@@ -31,6 +31,22 @@ ListTF   parse_TF(FILE* B, Stack part);
 ListNUM  parse_NUM(FILE* B, Stack part);
 Paper* parse_paper(FILE* P);
 
+//Generating output file
+void find_MCQ(FILE* op, Paper* P, Bank* B);
+void find_FITB(FILE* op, Paper* P, Bank* B);
+void find_TF(FILE* op, Paper* P, Bank* B);
+void find_NUM(FILE* op, Paper* P, Bank* B);
+
+void select_MCQ(FILE* op, MCQ** possible, int found, int no_req, int no_ops);
+void select_FITB(FILE* op, MCQ** possible, int found, int no_req);
+void select_TF(FILE* op, MCQ** possible, int found, int no_req);
+void select_NUM(FILE* op, MCQ** possible, int found, int no_req);
+
+void fileput_MCQ(FILE* op, MCQ* M);
+void fileput_FITB(FILE* op, FITB* M);
+void fileput_TF(FILE* op, TF* M);
+void fileput_NUM(FILE* op, NUM* M);
+
 // Inserting nodes in linked list
 void InsertMCQ(ListMCQ L , MCQ* X);
 void InsertFITB(ListFITB L , FITB* X);
