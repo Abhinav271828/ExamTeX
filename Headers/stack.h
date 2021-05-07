@@ -5,17 +5,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-//Header file for stack functionality
+// Header file for stack functionality
 
 typedef struct Node Node;
-typedef struct Node* PtrToNode;
+typedef struct Node *PtrToNode;
 typedef PtrToNode Stack;
-
 
 struct Node
 {
-    char part; // part = 't' if \begin{type} has been pushed; 'q' if \begin{question} has been pushed 
-    struct Node* next;
+    char part; // part = 't' if \begin{type} has been pushed; 
+               // 'q' if \begin{question} has been pushed
+    struct Node *next;
 };
 
 Stack create_empty();

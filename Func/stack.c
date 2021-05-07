@@ -10,7 +10,7 @@ void push(Stack S, char val)
 char pop(Stack S)
 {
     char c = S->next->part;
-    S->next = S->next-> next;
+    S->next = S->next->next;
     return c;
 }
 
@@ -18,16 +18,16 @@ Stack create_empty()
 {
     PtrToNode temp;
     temp = (PtrToNode)malloc(sizeof(Node));
-    temp -> part = ' ';
-    temp -> next = NULL;
+    temp->part = ' ';
+    temp->next = NULL;
     return temp;
 }
 PtrToNode create_node(char val)
 {
-    Node* val1;
-    val1 = (Node*)malloc(sizeof(Node));
-    val1 -> part = val;
-    val1 ->next = NULL;
+    Node *val1;
+    val1 = (Node *)malloc(sizeof(Node));
+    val1->part = val;
+    val1->next = NULL;
     return val1;
 }
 
