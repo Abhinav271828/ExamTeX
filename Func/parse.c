@@ -32,7 +32,7 @@ Bank *parse_bank(FILE *B)
             }
         }
 
-        if (top(brack) = '{')
+        if (top(brack) == '{')
         {
             for (int i = 0; i < 5; i++)
                 fscanf(B, "%c", &wd[i]);
@@ -369,7 +369,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
 Paper *parse_paper(FILE *P)
 {
     Paper *pr = init_paper();
-    char c;
+    char c; int k;
     Stack part = create_empty();
     Stack brack = create_empty();
     char wd[10];
@@ -424,7 +424,7 @@ Paper *parse_paper(FILE *P)
                 exit(0);
             }
             for (k = 0; k < 10; k++)
-                if (pr->mcq_reqs[k] == 0)
+                if (pr->mcq_reqs[k].no_ops == 0)
                     break;
             if (k == 10)
             {
@@ -479,13 +479,14 @@ Paper *parse_paper(FILE *P)
                 printf("Unrecognised sequence %s\n", wd);
                 exit(0);
             }
-            fscanf(P, "%d", &pr->mcq_reqs[k].diff_lb);
-            fscanf(P, "%c", &c) if (c != ',')
+            fscanf(P, "%f", &pr->mcq_reqs[k].diff_lb);
+            fscanf(P, "%c", &c);
+            if (c != ',')
             {
                 printf("Unrecognised LB/UB delimiter %c\n", c);
                 exit(0);
             }
-            fscanf(P, "%d", &pr->mcq_reqs[k].diff_ub);
+            fscanf(P, "%f", &pr->mcq_reqs[k].diff_ub);
             fscanf(P, "%c", &c);
             if (c != '}')
             {
@@ -544,13 +545,14 @@ Paper *parse_paper(FILE *P)
                 printf("Unrecognised sequence %s\n", wd);
                 exit(0);
             }
-            fscanf(P, "%d", &pr->fitb_reqs.diff_lb);
-            fscanf(P, "%c", &c) if (c != ',')
+            fscanf(P, "%f", &pr->fitb_reqs.diff_lb);
+            fscanf(P, "%c", &c);
+            if (c != ',')
             {
                 printf("Unrecognised LB/UB delimiter %c\n", c);
                 exit(0);
             }
-            fscanf(P, "%d", &pr->fitb_reqs.diff_ub);
+            fscanf(P, "%f", &pr->fitb_reqs.diff_ub);
             fscanf(P, "%c", &c);
             if (c != '}')
             {
@@ -609,13 +611,14 @@ Paper *parse_paper(FILE *P)
                 printf("Unrecognised sequence %s\n", wd);
                 exit(0);
             }
-            fscanf(P, "%d", &pr->tf_reqs.diff_lb);
-            fscanf(P, "%c", &c) if (c != ',')
+            fscanf(P, "%f", &pr->tf_reqs.diff_lb);
+            fscanf(P, "%c", &c);
+            if (c != ',')
             {
                 printf("Unrecognised LB/UB delimiter %c\n", c);
                 exit(0);
             }
-            fscanf(P, "%d", &pr->tf_reqs.diff_ub);
+            fscanf(P, "%f", &pr->tf_reqs.diff_ub);
             fscanf(P, "%c", &c);
             if (c != '}')
             {
@@ -674,13 +677,14 @@ Paper *parse_paper(FILE *P)
                 printf("Unrecognised sequence %s\n", wd);
                 exit(0);
             }
-            fscanf(P, "%d", &pr->num_reqs.diff_lb);
-            fscanf(P, "%c", &c) if (c != ',')
+            fscanf(P, "%f", &pr->num_reqs.diff_lb);
+            fscanf(P, "%c", &c);
+            if (c != ',')
             {
                 printf("Unrecognised LB/UB delimiter %c\n", c);
                 exit(0);
             }
-            fscanf(P, "%d", &pr->num_reqs.diff_ub);
+            fscanf(P, "%f", &pr->num_reqs.diff_ub);
             fscanf(P, "%c", &c);
             if (c != '}')
             {
@@ -1223,7 +1227,8 @@ ListFITB parse_FITB(FILE *B, Stack part)
             M->text = (char *)malloc((strlen(text) + 1) * sizeof(char));
             strcpy(M->text, text);
 
-            fscanf(B, " %c%c", wd);
+            fscanf(B, " %c%c", &wd[0], &wd[1]);
+            wd[2] = '\0';
 
             if (strcmp(wd, "\\\\"))
             {
