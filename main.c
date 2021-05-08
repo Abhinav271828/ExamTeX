@@ -20,8 +20,8 @@ int main (void)
     P = parse_paper(pr);
     printf("Paper parsed\n");
 
-    op = fopen(output,"a");
-    printf("Output file opened in append mode\n");
+    op = fopen(output,"w");
+    printf("Output file opened in write mode\n");
     find_MCQ(op,P,B);
     find_FITB(op,P,B);
     find_TF(op,P,B);

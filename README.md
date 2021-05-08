@@ -13,6 +13,7 @@ In the list of questions, each question's format is as follows: for MCQs,
     \begin{question;<diff>}
     "question_text" \\ "corr_op1" & "corr_op2" \\ "wrong_op1" & "wrong_op2"
     \end{question}
+The `\\` after correct options is mandatory even if there are no wrong options.
 
 for fill in the blanks,
 
@@ -45,5 +46,6 @@ For compiling the program, `cd` into the repo and run the `make` command. To run
 
     Enter question bank filename: Sample/QBanks/test1.txt
     Enter question paper filename: Sample/QPapers/test1.txt
+    Enter output filename: sampleoutput.txt
 
 The output file will be generated in the PWD.

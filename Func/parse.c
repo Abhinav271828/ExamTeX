@@ -85,7 +85,7 @@ Bank *parse_bank(FILE *B)
 ListMCQ parse_MCQ(FILE *B, Stack part)
 {
     char c;
-    char wd[10];
+    char wd[20];
     char text[50];
     float diff;
     int pos, opcount;
@@ -289,51 +289,57 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
             }
 
             opcount = 0;
+            // fscanf(B, " %c", &c);
+            // if (c != '\"')
+            // {
+            //     printf("\" missing\n");
+            //     exit(0);
+            // }
+            // pos = 0;
+            // fscanf(B, "%c", &c);
+            // while (c != '\"')
+            // {
+            //     text[pos++] = c;
+            //     fscanf(B, "%c", &c);
+            // }
+            // text[pos] = '\0';
+            // M->wrong = (char **)malloc(sizeof(char *));
+            // M->wrong[0] = (char *)malloc(strlen(text) * sizeof(char));
+            // strcpy(M->wrong[0], text);
+            // opcount++;
+
             fscanf(B, " %c", &c);
-            if (c != '\"')
-            {
-                printf("\" missing\n");
-                exit(0);
-            }
-            pos = 0;
-            fscanf(B, "%c", &c);
-            while (c != '\"')
-            {
-                text[pos++] = c;
-                fscanf(B, "%c", &c);
-            }
-            text[pos] = '\0';
             M->wrong = (char **)malloc(sizeof(char *));
-            M->wrong[0] = (char *)malloc(strlen(text) * sizeof(char));
-            strcpy(M->wrong[0], text);
-            opcount++;
-
-            fscanf(B, " %c", &c);
-
-            while (c == '&')
+            if (c == '\"')
             {
-                fscanf(B, " %c", &c);
-                if (c != '\"')
+                fseek(B,-1L,SEEK_CUR);
+                c = '&';
+                while (c == '&')
                 {
-                    printf("\" missing\n");
-                    exit(0);
-                }
-                pos = 0;
-                fscanf(B, "%c", &c);
-                while (c != '\"')
-                {
-                    text[pos++] = c;
+                    fscanf(B, " %c", &c);
+                    // printf("%c",c);
+                    if (c != '\"')
+                    {
+                        printf("\" missing %c\n",c);
+                        exit(0);
+                    }
+                    pos = 0;
                     fscanf(B, "%c", &c);
-                }
-                text[pos] = '\0';
-                M->wrong = realloc(M->wrong, (opcount + 1) * sizeof(char *));
-                M->wrong[opcount] = (char *)malloc(strlen(text) * sizeof(char));
-                strcpy(M->wrong[opcount++], text);
+                    while (c != '\"')
+                    {
+                        text[pos++] = c;
+                        fscanf(B, "%c", &c);
+                    }
+                    text[pos] = '\0';
+                    M->wrong = realloc(M->wrong, (opcount + 1) * sizeof(char *));
+                    M->wrong[opcount] = (char *)malloc(strlen(text) * sizeof(char));
+                    strcpy(M->wrong[opcount++], text);
 
-                fscanf(B, " %c", &c);
+                    fscanf(B, " %c", &c);
+                }
             }
             M->no_ops = M->no_corr + opcount;
-
+            // printf("%s\n",M->text);
             InsertMCQ(L, M);
             M = init_MCQ();
 

@@ -79,7 +79,7 @@ struct Request
 // Question paper file; list of requests, one for each type
 struct Paper
 {
-    struct Request mcq_reqs[10];
+    struct Request mcq_reqs[11];
     struct Request fitb_reqs;
     struct Request tf_reqs;
     struct Request num_reqs;

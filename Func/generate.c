@@ -8,8 +8,9 @@ void find_MCQ(FILE *op, Paper *P, Bank *B)
     MCQ **possible = (MCQ**)malloc(sizeof(MCQ*));
     int found = 0;
     int no_req, no_ops;
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 11; i++)
     {
+        // printf("%d\n",i);
         no_req = P->mcq_reqs[i].no_req;
         no_ops = P->mcq_reqs[i].no_ops;
         if (no_req == 0)
@@ -18,10 +19,11 @@ void find_MCQ(FILE *op, Paper *P, Bank *B)
         }
         trav = B->mcq_list->next;
         found = 0;
+        // printf("%d\n",no_req);
 
         while (trav != NULL)
         {
-            if (trav->no_corr <= no_ops && trav->diff >= P->mcq_reqs[i].diff_lb &&
+            if (trav->no_ops >= no_ops && trav->diff >= P->mcq_reqs[i].diff_lb &&
                 trav->diff <= P->mcq_reqs[i].diff_ub)
             {
                 possible = (MCQ**)realloc(possible,(found+1)*sizeof(MCQ*));
@@ -30,6 +32,7 @@ void find_MCQ(FILE *op, Paper *P, Bank *B)
 
             trav = trav->next;
         }
+        // printf("%d\n",found);
         if (found < no_req)
         {
             printf("Not enough MCQs, not adding!\n");
@@ -49,11 +52,13 @@ void select_MCQ(FILE *op, MCQ **possible, int found, int no_req, int no_ops)
     while (found != no_req)
     {
         rem = rand() % found;
+        // printf("%d\n",rem);
         for (int i = rem; i < found-1; i++)
             possible[i] = possible[i + 1];
         found--;
     }
-    fprintf(op,"MCQ:\n");
+    fprintf(op,"MCQ with %d options:\n",no_ops);
+    // printf("MCQ with %d options:\n",no_ops);
     for (int i = 0; i < found; i++)
     {
         fprintf(op, "%d) ",i+1);
@@ -66,25 +71,31 @@ void fileput_MCQ(FILE *op, MCQ *M, int no_ops)
 {
     srand(time(0));
     int r, corr = 0, wrong = 0;
+    // if (M==NULL)
+    // {
+    //     printf("ok\n");
+    // }
+    
     fprintf(op, "%s\n", M->text);
+    
     for (int i = 0; i < no_ops; i++)
     {
-        if (corr < M->no_corr && (corr + wrong) < no_ops)
+        if (corr < M->no_corr && wrong < M->no_ops - M->no_corr)
         {
             r = rand() % 2;
             if (r == 0)
             {
-                fprintf(op, "%d) %s\n", i + 1, M->corr[corr++]);
+                fprintf(op, "   %c) %s\n", i + 97, M->corr[corr++]);
             }
             if (r == 1)
             {
-                fprintf(op, "%d) %s\n", i + 1, M->wrong[wrong++]);
+                fprintf(op, "   %c) %s\n", i + 97, M->wrong[wrong++]);
             }
         }
-        else if ((corr+wrong) >= no_ops)
-            fprintf(op, "%d) %s\n", i + 1, M->corr[corr++]);
+        else if (wrong >= M->no_ops - M->no_corr)
+            fprintf(op, "   %c) %s\n", i + 97, M->corr[corr++]);
         else
-            fprintf(op, "%d) %s\n", i + 1, M->wrong[wrong++]);
+            fprintf(op, "   %c) %s\n", i + 97, M->wrong[wrong++]);
     }
 }
 
@@ -111,7 +122,7 @@ void find_FITB(FILE *op, Paper *P, Bank *B)
 
     if (found < no_req)
     {
-        printf("Not enough FITBs, not printing!\n");
+        printf("Not enough FITBs, not adding!\n");
     }
     else
     {
@@ -170,7 +181,7 @@ void find_TF(FILE *op, Paper *P, Bank *B)
 
     if (found < no_req)
     {
-        printf("Not enough TFs, not printing!\n");
+        printf("Not enough TFs, not adding!\n");
     }
     else
     {
@@ -228,7 +239,7 @@ void find_NUM(FILE *op, Paper *P, Bank *B)
     }
     if (found < no_req)
     {
-        printf("Not enough NUMs, not printing!\n");
+        printf("Not enough NUMs, not adding!\n");
     }
     else
     {
