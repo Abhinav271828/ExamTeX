@@ -5,11 +5,11 @@
 int main (void)
 {
     char paper[50], bank[50];
-    FILE* bk, pr, op; Bank* B; Paper* P;
+    FILE *bk, *pr, *op; Bank* B; Paper* P;
     printf("Enter question bank filename: ");
-    scanf("%s",&bank);
+    scanf("%s",bank);
     printf("Enter question paper filename: ");
-    scanf("%s",&paper);
+    scanf("%s",paper);
     
     bk = fopen(bank,"r");
     pr = fopen(paper,"r");
