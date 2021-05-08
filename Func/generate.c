@@ -5,7 +5,7 @@
 void find_MCQ(FILE *op, Paper *P, Bank *B)
 {
     MCQ *trav;
-    MCQ **possible = (MCQ**)malloc(sizeof(MCQ*));
+    MCQ **possible = (MCQ **)malloc(sizeof(MCQ *));
     int found = 0;
     int no_req, no_ops;
     for (int i = 0; i < 11; i++)
@@ -26,7 +26,7 @@ void find_MCQ(FILE *op, Paper *P, Bank *B)
             if (trav->no_ops >= no_ops && trav->diff >= P->mcq_reqs[i].diff_lb &&
                 trav->diff <= P->mcq_reqs[i].diff_ub)
             {
-                possible = (MCQ**)realloc(possible,(found+1)*sizeof(MCQ*));
+                possible = (MCQ **)realloc(possible, (found + 1) * sizeof(MCQ *));
                 possible[found++] = trav;
             }
 
@@ -53,18 +53,18 @@ void select_MCQ(FILE *op, MCQ **possible, int found, int no_req, int no_ops)
     {
         rem = rand() % found;
         // printf("%d\n",rem);
-        for (int i = rem; i < found-1; i++)
+        for (int i = rem; i < found - 1; i++)
             possible[i] = possible[i + 1];
         found--;
     }
-    fprintf(op,"MCQ with %d options:\n",no_ops);
+    fprintf(op, "MCQ with %d options:\n", no_ops);
     // printf("MCQ with %d options:\n",no_ops);
     for (int i = 0; i < found; i++)
     {
-        fprintf(op, "%d) ",i+1);
+        fprintf(op, "%d) ", i + 1);
         fileput_MCQ(op, possible[i], no_ops);
     }
-    fprintf(op,"--------------------\n");
+    fprintf(op, "--------------------\n");
 }
 
 void fileput_MCQ(FILE *op, MCQ *M, int no_ops)
@@ -75,9 +75,9 @@ void fileput_MCQ(FILE *op, MCQ *M, int no_ops)
     // {
     //     printf("ok\n");
     // }
-    
+
     fprintf(op, "%s\n", M->text);
-    
+
     for (int i = 0; i < no_ops; i++)
     {
         if (corr < M->no_corr && wrong < M->no_ops - M->no_corr)
@@ -102,7 +102,7 @@ void fileput_MCQ(FILE *op, MCQ *M, int no_ops)
 void find_FITB(FILE *op, Paper *P, Bank *B)
 {
     FITB *trav;
-    FITB **possible = (FITB**)malloc(sizeof(FITB*));
+    FITB **possible = (FITB **)malloc(sizeof(FITB *));
     int found = 0;
     int no_req;
     no_req = P->fitb_reqs.no_req;
@@ -113,7 +113,7 @@ void find_FITB(FILE *op, Paper *P, Bank *B)
     {
         if (trav->diff >= P->fitb_reqs.diff_lb && trav->diff <= P->fitb_reqs.diff_ub)
         {
-            possible = (FITB**)realloc(possible,(found+1)*sizeof(FITB*));
+            possible = (FITB **)realloc(possible, (found + 1) * sizeof(FITB *));
             possible[found++] = trav;
         }
 
@@ -138,17 +138,17 @@ void select_FITB(FILE *op, FITB **possible, int found, int no_req)
     while (found != no_req)
     {
         rem = rand() % found;
-        for (int i = rem; i < found-1; i++)
+        for (int i = rem; i < found - 1; i++)
             possible[i] = possible[i + 1];
         found--;
     }
-    fprintf(op,"FITB:\n");
+    fprintf(op, "FITB:\n");
     for (int i = 0; i < found; i++)
     {
-        fprintf(op,"%d) ",i+1);
+        fprintf(op, "%d) ", i + 1);
         fileput_FITB(op, possible[i]);
     }
-    fprintf(op,"--------------------\n");
+    fprintf(op, "--------------------\n");
 }
 
 void fileput_FITB(FILE *op, FITB *F)
@@ -161,7 +161,7 @@ void fileput_FITB(FILE *op, FITB *F)
 void find_TF(FILE *op, Paper *P, Bank *B)
 {
     TF *trav;
-    TF **possible = (TF**)malloc(sizeof(TF*));
+    TF **possible = (TF **)malloc(sizeof(TF *));
     int found = 0;
     int no_req;
     no_req = P->tf_reqs.no_req;
@@ -172,7 +172,7 @@ void find_TF(FILE *op, Paper *P, Bank *B)
     {
         if (trav->diff >= P->tf_reqs.diff_lb && trav->diff <= P->tf_reqs.diff_ub)
         {
-            possible = (TF**)realloc(possible,(found+1)*sizeof(TF*));
+            possible = (TF **)realloc(possible, (found + 1) * sizeof(TF *));
             possible[found++] = trav;
         }
 
@@ -197,17 +197,17 @@ void select_TF(FILE *op, TF **possible, int found, int no_req)
     while (found != no_req)
     {
         rem = rand() % found;
-        for (int i = rem; i < found-1; i++)
+        for (int i = rem; i < found - 1; i++)
             possible[i] = possible[i + 1];
         found--;
     }
-    fprintf(op,"TF:\n");
+    fprintf(op, "TF:\n");
     for (int i = 0; i < found; i++)
     {
-        fprintf(op, "%d) ",i+1);
+        fprintf(op, "%d) ", i + 1);
         fileput_TF(op, possible[i]);
     }
-    fprintf(op,"--------------------\n");
+    fprintf(op, "--------------------\n");
 }
 
 void fileput_TF(FILE *op, TF *T)
@@ -220,7 +220,7 @@ void fileput_TF(FILE *op, TF *T)
 void find_NUM(FILE *op, Paper *P, Bank *B)
 {
     NUM *trav;
-    NUM **possible = (NUM**)malloc(sizeof(NUM*));
+    NUM **possible = (NUM **)malloc(sizeof(NUM *));
     int found = 0;
     int no_req;
     no_req = P->num_reqs.no_req;
@@ -231,7 +231,7 @@ void find_NUM(FILE *op, Paper *P, Bank *B)
     {
         if (trav->diff >= P->num_reqs.diff_lb && trav->diff <= P->num_reqs.diff_ub)
         {
-            possible = (NUM**)realloc(possible,(found+1)*sizeof(NUM*));
+            possible = (NUM **)realloc(possible, (found + 1) * sizeof(NUM *));
             possible[found++] = trav;
         }
 
@@ -255,17 +255,17 @@ void select_NUM(FILE *op, NUM **possible, int found, int no_req)
     while (found != no_req)
     {
         rem = rand() % found;
-        for (int i = rem; i < found-1; i++)
+        for (int i = rem; i < found - 1; i++)
             possible[i] = possible[i + 1];
         found--;
     }
-    fprintf(op,"NUM:\n");
+    fprintf(op, "NUM:\n");
     for (int i = 0; i < found; i++)
     {
-        fprintf(op,"%d) ",i+1);
+        fprintf(op, "%d) ", i + 1);
         fileput_NUM(op, possible[i]);
     }
-    fprintf(op,"--------------------\n");
+    fprintf(op, "--------------------\n");
 }
 
 void fileput_NUM(FILE *op, NUM *N)
@@ -274,4 +274,3 @@ void fileput_NUM(FILE *op, NUM *N)
     int r, corr = 0, wrong = 0;
     fprintf(op, "%s\n", N->text);
 }
-

@@ -12,7 +12,8 @@ Bank *parse_bank(FILE *B)
     fscanf(B, "%c", &c);
     while (1)
     {
-        if (c == 13) break;
+        if (c == 13)
+            break;
         if (c == '\\')
         {
             for (int i = 0; i < 5; i++)
@@ -312,7 +313,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
             M->wrong = (char **)malloc(sizeof(char *));
             if (c == '\"')
             {
-                fseek(B,-1L,SEEK_CUR);
+                fseek(B, -1L, SEEK_CUR);
                 c = '&';
                 while (c == '&')
                 {
@@ -320,7 +321,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                     // printf("%c",c);
                     if (c != '\"')
                     {
-                        printf("\" missing %c\n",c);
+                        printf("\" missing %c\n", c);
                         exit(0);
                     }
                     pos = 0;
@@ -375,17 +376,19 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
 Paper *parse_paper(FILE *P)
 {
     Paper *pr = init_paper();
-    char c; int k;
+    char c;
+    int k;
     Stack part = create_empty();
     Stack brack = create_empty();
     char wd[10];
     fscanf(P, "%c", &c);
     while (1)
     {
-        if (c == '}') break;
+        if (c == '}')
+            break;
         if (c != '\\')
         {
-            printf("Unrecognised beginning character %c\n",c);
+            printf("Unrecognised beginning character %c\n", c);
             exit(0);
         }
 

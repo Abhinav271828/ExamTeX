@@ -14,7 +14,7 @@ typedef PtrToNode Stack;
 
 struct Node
 {
-    char part; // part = 't' if \begin{type} has been pushed; 
+    char part; // part = 't' if \begin{type} has been pushed;
                // 'q' if \begin{question} has been pushed
     struct Node *next;
 };
