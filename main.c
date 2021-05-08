@@ -11,7 +11,8 @@ int main (void)
     printf("Enter question paper filename: ");
     scanf("%s",&paper);
     
-    bank = fopen(bank,"r");
+    bk = fopen(bank,"r");
+    pr = fopen(paper,"r");
     B = parse_bank(bk);
     P = parse_paper(pr);
 

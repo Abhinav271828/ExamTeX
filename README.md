@@ -43,7 +43,7 @@ In the case of MCQs, the number of options required must be given in parentheses
 ## Running Test Cases
 For compiling the program, `cd` into the repo and run the `make` command. To run it, execute `./a.out`. If you want to run one of the included tests, please enter the file path at the prompt as follows:
 
-    Enter question bank filename: Sample\ Files/QBanks/test1.txt
-    Enter question paper filename: Sample\ Files/QPapers/test1.txt
+    Enter question bank filename: Sample/QBanks/test1.txt
+    Enter question paper filename: Sample/QPapers/test1.txt
 
 The output file will be generated in the PWD.
