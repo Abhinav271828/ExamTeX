@@ -54,6 +54,6 @@
         “corona virus has nothing to do with china” \\ F 
     \end{question}
     \begin{question;4.0}
-        \“we shouldnot cheat in exams” \\ F 
+        “we shouldnot cheat in exams” \\ F 
     \end{question}
 \end{type}
