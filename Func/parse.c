@@ -12,6 +12,7 @@ Bank *parse_bank(FILE *B)
     fscanf(B, "%c", &c);
     while (1)
     {
+        if (c == 13) break;
         if (c == '\\')
         {
             for (int i = 0; i < 5; i++)
@@ -50,6 +51,7 @@ Bank *parse_bank(FILE *B)
                 fscanf(B, "%c", &wd[j++]);
             }
             wd[j - 1] = '\0';
+            pop(brack);
             fscanf(B, "%c", &c);
             while (c == ' ' || c == '\t' || c == '\n')
                 fscanf(B, "%c", &c);
@@ -82,18 +84,16 @@ Bank *parse_bank(FILE *B)
 
 ListMCQ parse_MCQ(FILE *B, Stack part)
 {
-    // FILE* B = fopen("qbankmcq.txt","r");
     char c;
     char wd[10];
     char text[50];
     float diff;
     int pos, opcount;
-    Stack brack = create_empty(); // Stack part = create_empty();
+    Stack brack = create_empty();
     ListMCQ L = init_MCQ();
     MCQ *M = init_MCQ();
 
-    // push(part,'t');
-    fscanf(B, "%c", &c);
+    fscanf(B, " %c", &c);
     while (1)
     {
         if (c == '\\')
@@ -379,7 +379,7 @@ Paper *parse_paper(FILE *P)
         if (c == '}') break;
         if (c != '\\')
         {
-            printf("Unrecognised beginning character\n");
+            printf("Unrecognised beginning character %c\n",c);
             exit(0);
         }
 
@@ -626,9 +626,9 @@ Paper *parse_paper(FILE *P)
                 exit(0);
             }
         }
-        if (c == 't')
+        if (c == 'n')
         {
-            wd[0] = 't';
+            wd[0] = 'n';
             fscanf(P, "%c%c", &wd[1], &wd[2]);
             wd[3] = '\0';
             if (strcmp(wd, "num"))
@@ -702,18 +702,16 @@ Paper *parse_paper(FILE *P)
 }
 ListNUM parse_NUM(FILE *B, Stack part)
 {
-    //     FILE* B = fopen("numtest.txt","r");
-    char c, poop;
+    char c;
     int ans;
     char wd[10];
     char text[50];
     float diff;
     int pos;
-    Stack brack = create_empty(); // Stack part = create_empty();
+    Stack brack = create_empty();
     ListNUM L = init_NUM();
     NUM *M = init_NUM();
 
-    // push(part,'t');
     fscanf(B, " %c", &c);
     while (1)
     {
@@ -762,10 +760,8 @@ ListNUM parse_NUM(FILE *B, Stack part)
                         printf("Unrecognised sequence {%s%c}\n", wd, c);
                         exit(0);
                     }
-                    poop = pop(brack);
-                    // printf("%c\n",poop);
-                    poop = pop(part);
-                    // printf("%c\n",poop);
+                    pop(brack);
+                    pop(part);
                     break;
                 }
                 for (int i = 4; i < 8; i++)
@@ -789,8 +785,7 @@ ListNUM parse_NUM(FILE *B, Stack part)
                 fscanf(B, "%c", &c);
                 if (c == '}')
                 {
-                    poop = pop(brack);
-                    // printf("%c\n",poop);
+                    pop(brack);
                 }
                 else
                 {
@@ -813,29 +808,25 @@ ListNUM parse_NUM(FILE *B, Stack part)
                 fscanf(B, "%c", &c);
                 if (c == '}')
                 {
-                    poop = pop(brack);
-                    // printf("%c\n",poop);
+                    pop(brack);
                 }
                 else
                 {
                     printf("Unrecognised question terminator {%s}\n", wd);
                     exit(0);
                 }
-                poop = pop(part);
-                // printf("%c\n",poop);
+                pop(part);
             }
         }
 
         if (top(part) == 'q')
         {
             fscanf(B, " %c", &c);
-            // printf("%c",c);
             if (c != '\"')
             {
                 printf("\" missing\n");
                 exit(0);
             }
-            // printf("%c",c);
 
             pos = 0;
             fscanf(B, "%c", &c);
@@ -896,18 +887,16 @@ ListNUM parse_NUM(FILE *B, Stack part)
 
 ListTF parse_TF(FILE *B, Stack part)
 {
-    //     FILE* B = fopen("numtest.txt","r");
-    char c, poop;
+    char c;
     char ans;
     char wd[10];
     char text[50];
     float diff;
     int pos;
-    Stack brack = create_empty(); // Stack part = create_empty();
+    Stack brack = create_empty();
     ListTF L = init_TF();
     TF *M = init_TF();
 
-    // push(part,'t');
     fscanf(B, " %c", &c);
     while (1)
     {
@@ -956,10 +945,8 @@ ListTF parse_TF(FILE *B, Stack part)
                         printf("Unrecognised sequence {%s%c}\n", wd, c);
                         exit(0);
                     }
-                    poop = pop(brack);
-                    // printf("%c\n",poop);
-                    poop = pop(part);
-                    // printf("%c\n",poop);
+                    pop(brack);
+                    pop(part);
                     break;
                 }
                 for (int i = 4; i < 8; i++)
@@ -983,8 +970,7 @@ ListTF parse_TF(FILE *B, Stack part)
                 fscanf(B, "%c", &c);
                 if (c == '}')
                 {
-                    poop = pop(brack);
-                    // printf("%c\n",poop);
+                    pop(brack);
                 }
                 else
                 {
@@ -1007,29 +993,25 @@ ListTF parse_TF(FILE *B, Stack part)
                 fscanf(B, "%c", &c);
                 if (c == '}')
                 {
-                    poop = pop(brack);
-                    // printf("%c\n",poop);
+                    pop(brack);
                 }
                 else
                 {
                     printf("Unrecognised question terminator {%s}\n", wd);
                     exit(0);
                 }
-                poop = pop(part);
-                // printf("%c\n",poop);
+                pop(part);
             }
         }
 
         if (top(part) == 'q')
         {
             fscanf(B, " %c", &c);
-            // printf("%c",c);
             if (c != '\"')
             {
                 printf("\" missing\n");
                 exit(0);
             }
-            // printf("%c",c);
 
             pos = 0;
             fscanf(B, "%c", &c);
@@ -1090,7 +1072,7 @@ ListTF parse_TF(FILE *B, Stack part)
 
 ListFITB parse_FITB(FILE *B, Stack part)
 {
-    char c, poop;
+    char c;
     char *ans;
     char wd[10];
     char text[50];
