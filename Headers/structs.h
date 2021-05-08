@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 // Header file defining ADTs
 
@@ -68,6 +69,13 @@ struct NUM
     struct NUM *next;
 };
 
+// Each request in question paper
+struct Request
+{
+    int no_req, no_ops;
+    float diff_lb, diff_ub;
+};
+
 // Question paper file; list of requests, one for each type
 struct Paper
 {
@@ -77,9 +85,4 @@ struct Paper
     struct Request num_reqs;
 };
 
-// Each request in question paper
-struct Request
-{
-    int no_req, no_ops;
-    float diff_lb, diff_ub;
-};
+#endif

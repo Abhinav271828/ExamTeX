@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include "stack.h"
+#include "structs.h"
 
 //Header file declaring functions
 
@@ -38,9 +41,9 @@ void find_TF(FILE* op, Paper* P, Bank* B);
 void find_NUM(FILE* op, Paper* P, Bank* B);
 
 void select_MCQ(FILE* op, MCQ** possible, int found, int no_req, int no_ops);
-void select_FITB(FILE* op, MCQ** possible, int found, int no_req);
-void select_TF(FILE* op, MCQ** possible, int found, int no_req);
-void select_NUM(FILE* op, MCQ** possible, int found, int no_req);
+void select_FITB(FILE* op, FITB** possible, int found, int no_req);
+void select_TF(FILE* op, TF** possible, int found, int no_req);
+void select_NUM(FILE* op, NUM** possible, int found, int no_req);
 
 void fileput_MCQ(FILE* op, MCQ* M);
 void fileput_FITB(FILE* op, FITB* M);
