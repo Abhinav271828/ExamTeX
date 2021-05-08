@@ -12,24 +12,24 @@ Bank *parse_bank(FILE *B)
     fscanf(B, "%c", &c);
     while (1)
     {
-        if (c == 13)
+        if (c == 13)                            //termination condition; CR character
             break;
         if (c == '\\')
         {
             for (int i = 0; i < 5; i++)
                 fscanf(B, "%c", &wd[i]);
             wd[5] = '\0';
-            if (strcmp(wd, "begin"))
+            if (strcmp(wd, "begin"))           //Checks for "\begin"
             {
-                printf("Unrecognised sequence \\%s\n", wd);
+                printf("Unrecognised sequence \\%s in place of \\begin{type} in question bank\n", wd);
                 exit(0);
             }
             fscanf(B, "%c", &c);
-            if (c == '{')
+            if (c == '{')                      //Pushes '{' onto stack and enters next if
                 push(brack, '{');
             else
             {
-                printf("Unrecognised sequence begin%c\n", c);
+                printf("Unrecognised sequence \\begin%c in place of \\begin{type} in question bank\n", c);
                 exit(0);
             }
         }
@@ -39,46 +39,44 @@ Bank *parse_bank(FILE *B)
             for (int i = 0; i < 5; i++)
                 fscanf(B, "%c", &wd[i]);
             wd[5] = '\0';
-            if (strcmp(wd, "type="))
+            if (strcmp(wd, "type="))        //Checks for "\begin{type="
             {
-                printf("Unrecognised sequence %s\n", wd);
+                printf("Unrecognised sequence \\begin{%s in place of \\begin{type= in question bank\n", wd);
                 exit(0);
             }
-            push(part, 't');
+            push(part, 't');               //Indicates that the type is about to be read and the question is yet to be
             int j = 0;
-            fscanf(B, "%c", &wd[j++]);
-            while (wd[j - 1] != '}')
-            {
-                fscanf(B, "%c", &wd[j++]);
-            }
-            wd[j - 1] = '\0';
+            fscanf(B, "%c", &wd[j++]);       // Loop to take
+            while (wd[j - 1] != '}')         // characters as
+            {                                // input until '}'
+                fscanf(B, "%c", &wd[j++]);   // is encountered.
+            }                                // This should be
+            wd[j - 1] = '\0';                // the type.
             pop(brack);
-            fscanf(B, "%c", &c);
-            while (c == ' ' || c == '\t' || c == '\n')
-                fscanf(B, "%c", &c);
-            fseek(B, -1L, SEEK_CUR);
+            fscanf(B, "%c", &c);             // Reads the first non-space character following [should be \]
+            fseek(B, -1L, SEEK_CUR);         // and rewinds so as to be able to read it from inside parse_<type>()
             if (!strcmp(wd, "mcq"))
             {
-                bk->mcq_list = parse_MCQ(B, part);
+                bk->mcq_list = parse_MCQ(B, part);      //reads from \begin{question;<diff>} until \end{type} and stores
             }
             if (!strcmp(wd, "fitb"))
             {
-                bk->fitb_list = parse_FITB(B, part);
+                bk->fitb_list = parse_FITB(B, part);    //reads from \begin{question;<diff>} until \end{type} and stores
             }
             if (!strcmp(wd, "num"))
             {
-                bk->num_list = parse_NUM(B, part);
+                bk->num_list = parse_NUM(B, part);      //reads from \begin{question;<diff>} until \end{type} and stores
             }
             if (!strcmp(wd, "tf"))
             {
-                bk->tf_list = parse_TF(B, part);
+                bk->tf_list = parse_TF(B, part);        //reads from \begin{question;<diff>} until \end{type} and stores
             }
         }
 
-        fscanf(B, " %c", &c);
+        fscanf(B, " %c", &c);       //Reads from after \end{type} until the next \begin{type=<type>}, if any
     }
 
-    fclose(B);
+    fclose(B);                      //Closes file
 
     return bk;
 }
@@ -116,7 +114,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
             wd[5] = '\0';
             if (strcmp(wd, "begin"))
             {
-                printf("Unrecognised sequence \\%s\n", wd);
+                printf("Unrecognised sequence \\%s in question bank\n", wd);
                 exit(0);
             }
             fscanf(B, "%c", &c);
@@ -139,7 +137,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                     fscanf(B, "%c", &c);
                     if (c != '}')
                     {
-                        printf("Unrecognised sequence {%s%c}\n", wd, c);
+                        printf("Unrecognised sequence \\end{%s%c in place of \\end{type} in question bank\n", wd, c);
                         exit(0);
                     }
                     pop(brack);
@@ -151,13 +149,13 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                 wd[8] = '\0';
                 if (strcmp(wd, "question"))
                 {
-                    printf("Unrecognised part %s\n", wd);
+                    printf("Unrecognised part {%s in place of \\begin{question; in question bank\n", wd);
                     exit(0);
                 }
                 fscanf(B, "%c", &c);
                 if (c != ';')
                 {
-                    printf("Unrecognised difficulty delimiter\n");
+                    printf("Unrecognised difficulty delimiter %c in question bank\n", c);
                     exit(0);
                 }
 
@@ -171,7 +169,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                 }
                 else
                 {
-                    printf("Difficulty NaN\n");
+                    printf("Difficulty NaN in question bank\n");
                     exit(0);
                 }
                 push(part, 'q');
@@ -184,7 +182,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                 wd[8] = '\0';
                 if (strcmp(wd, "question"))
                 {
-                    printf("Unrecognised question terminator {%s}\n", wd);
+                    printf("Unrecognised question terminator {%s in place of {end} in question bank\n", wd);
                     exit(0);
                 }
                 fscanf(B, "%c", &c);
@@ -194,7 +192,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                 }
                 else
                 {
-                    printf("Unrecognised question terminator {%s}\n", wd);
+                    printf("Unrecognised question terminator {%s%c in place of {end} in question bank\n", wd, c);
                     exit(0);
                 }
                 pop(part);
@@ -206,7 +204,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
             fscanf(B, " %c", &c);
             if (c != '\"')
             {
-                printf("\" missing\n");
+                printf("\" missing before question text; difficulty %f\n", M->diff);
                 exit(0);
             }
             pos = 0;
@@ -225,7 +223,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
 
             if (strcmp(wd, "\\\\"))
             {
-                printf("Unrecognised option delimiter\n");
+                printf("Unrecognised question/option delimiter %s in question bank; question \"%s\"\n", wd, M->text);
                 exit(0);
             }
 
@@ -233,7 +231,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
             fscanf(B, " %c", &c);
             if (c != '\"')
             {
-                printf("\" missing\n");
+                printf("\" missing before correct option 1 in question bank; question \"%s\"\n", M->text);
                 exit(0);
             }
             pos = 0;
@@ -256,7 +254,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                 fscanf(B, " %c", &c);
                 if (c != '\"')
                 {
-                    printf("\" missing\n");
+                    printf("\" missing before correct option %d in question bank; question \"%s\"\n", opcount, M->text);
                     exit(0);
                 }
                 pos = 0;
@@ -267,7 +265,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                     fscanf(B, "%c", &c);
                 }
                 text[pos] = '\0';
-                M->corr = realloc(M->corr, (opcount + 1) * sizeof(char *));
+                M->corr = (char **)realloc(M->corr, (opcount + 1) * sizeof(char *));
                 M->corr[opcount] = (char *)malloc(strlen(text) * sizeof(char));
                 strcpy(M->corr[opcount++], text);
 
@@ -278,36 +276,18 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
 
             if (c != '\\')
             {
-                printf("Unrecognised correct option delimiter\n");
+                printf("Unrecognised correct/wrong option delimiter %c in question bank; question \"%s\"\n", c, M->text);
                 exit(0);
             }
 
             fscanf(B, "%c", &c);
             if (c != '\\')
             {
-                printf("Unrecognised correct option delimiter\n");
+                printf("Unrecognised correct option delimiter \\%c in question bank; question \"%s\"\n", c, M->text);
                 exit(0);
             }
 
             opcount = 0;
-            // fscanf(B, " %c", &c);
-            // if (c != '\"')
-            // {
-            //     printf("\" missing\n");
-            //     exit(0);
-            // }
-            // pos = 0;
-            // fscanf(B, "%c", &c);
-            // while (c != '\"')
-            // {
-            //     text[pos++] = c;
-            //     fscanf(B, "%c", &c);
-            // }
-            // text[pos] = '\0';
-            // M->wrong = (char **)malloc(sizeof(char *));
-            // M->wrong[0] = (char *)malloc(strlen(text) * sizeof(char));
-            // strcpy(M->wrong[0], text);
-            // opcount++;
 
             fscanf(B, " %c", &c);
             M->wrong = (char **)malloc(sizeof(char *));
@@ -318,10 +298,9 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                 while (c == '&')
                 {
                     fscanf(B, " %c", &c);
-                    // printf("%c",c);
                     if (c != '\"')
                     {
-                        printf("\" missing %c\n", c);
+                        printf("\" missing before wrong option %d in question bank; question \"%s\"\n", opcount + 1, M->text);
                         exit(0);
                     }
                     pos = 0;
@@ -332,7 +311,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                         fscanf(B, "%c", &c);
                     }
                     text[pos] = '\0';
-                    M->wrong = realloc(M->wrong, (opcount + 1) * sizeof(char *));
+                    M->wrong = (char **)realloc(M->wrong, (opcount + 1) * sizeof(char *));
                     M->wrong[opcount] = (char *)malloc(strlen(text) * sizeof(char));
                     strcpy(M->wrong[opcount++], text);
 
@@ -340,13 +319,12 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                 }
             }
             M->no_ops = M->no_corr + opcount;
-            // printf("%s\n",M->text);
             InsertMCQ(L, M);
             M = init_MCQ();
 
             if (c != '\\')
             {
-                printf("Unrecognised question terminator\n");
+                printf("Unrecognised question terminator %c in question bank; question \"%s\"\n", c, M->text);
                 exit(0);
             }
 
@@ -355,7 +333,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
             wd[3] = '\0';
             if (strcmp(wd, "end"))
             {
-                printf("Unrecognised sequence \\%s\n", wd);
+                printf("Unrecognised question terminator sequence \\%s; question \"%s\"\n", wd, M->text);
                 exit(0);
             }
 
@@ -378,50 +356,48 @@ Paper *parse_paper(FILE *P)
     Paper *pr = init_paper();
     char c;
     int k;
-    Stack part = create_empty();
-    Stack brack = create_empty();
     char wd[10];
     fscanf(P, "%c", &c);
     while (1)
     {
-        if (c == '}')
+        if (c == '}')                   //termination condition; '}' character
             break;
         if (c != '\\')
         {
-            printf("Unrecognised beginning character %c\n", c);
+            printf("Unrecognised beginning character %c in question paper file\n", c);
             exit(0);
         }
 
         for (int i = 0; i < 6; i++)
             fscanf(P, "%c", &wd[i]);
         wd[6] = '\0';
-        if (strcmp(wd, "sample"))
+        if (strcmp(wd, "sample"))       //Checks for "\sample"
         {
-            printf("Unrecognised sequence %s\n", wd);
+            printf("Unrecognised sequence \\%s in place of \\sample in question paper file\n", wd);
             exit(0);
         }
 
         fscanf(P, "%c", &c);
         if (c != '{')
         {
-            printf("Unrecognised sample%c\n", c);
+            printf("Unrecognised sequence \\sample%c in place of \\sample{ in question paper file\n", c);
             exit(0);
         }
         for (int i = 0; i < 5; i++)
             fscanf(P, "%c", &wd[i]);
         wd[5] = '\0';
-        if (strcmp(wd, "type="))
+        if (strcmp(wd, "type="))        //Checks for "\sample{type="
         {
-            printf("Unrecognised sequence %s\n", wd);
+            printf("Unrecognised sequence {%s in place of {type= in question paper file\n", wd);
             exit(0);
         }
-        fscanf(P, "%c", &c);
+        fscanf(P, "%c", &c);            //Reads first character of type and proceeds
         if (c == 'm')
         {
             wd[0] = 'm';
             fscanf(P, "%c%c", &wd[1], &wd[2]);
             wd[3] = '\0';
-            if (strcmp(wd, "mcq"))
+            if (strcmp(wd, "mcq"))      //Makes sure type is "mcq"
             {
                 printf("Unrecognised type %s\n", wd);
                 exit(0);
@@ -429,77 +405,77 @@ Paper *parse_paper(FILE *P)
             fscanf(P, "%c", &c);
             if (c != '(')
             {
-                printf("No_ops not given\n");
+                printf("No_ops not given for mcq\n");
                 exit(0);
             }
-            for (k = 0; k < 10; k++)
-                if (pr->mcq_reqs[k].no_ops == 0)
-                    break;
-            if (k == 10)
+            for (k = 0; k < 10; k++)                // Finds first
+                if (pr->mcq_reqs[k]->no_ops == 0)   // non-empty mcq_req
+                    break;                          // in the paper
+            if (k == 10)                    //All mcq_reqs are filled
             {
                 printf("Too many mcq requests!\n");
                 exit(0);
             }
-            fscanf(P, "%d", &pr->mcq_reqs[k].no_ops);
+            fscanf(P, "%d", &pr->mcq_reqs[k]->no_ops); //Reads mcq(no_ops)
             fscanf(P, "%c", &c);
             if (c != ')')
             {
-                printf("No_ops NaN\n");
+                printf("No_ops NaN for mcq(%d)\n", pr->mcq_reqs[k]->no_ops);
                 exit(0);
             }
-            fscanf(P, "%c", &c);
-            if (c != '}')
+            fscanf(P, "%c", &c);          
+            if (c != '}')               //Reads till "\sample{type=mcq(no_ops)}"
             {
-                printf("Intervening characters before }\n");
+                printf("Intervening characters between ) and } in mcq(%d) in question paper file\n", pr->mcq_reqs[k]->no_ops);
                 exit(0);
             }
             fscanf(P, "%c", &c);
             if (c != '{')
             {
-                printf("Intervening characters before {\n");
+                printf("Intervening characters between } and { in mcq(%d) in question paper file\n", pr->mcq_reqs[k]->no_ops);
                 exit(0);
             }
             fscanf(P, "%c%c", &wd[0], &wd[1]);
             wd[2] = '\0';
-            if (strcmp(wd, "#="))
+            if (strcmp(wd, "#="))       //Reads "{#="
             {
-                printf("Unrecognised sequence %s\n", wd);
+                printf("Unrecognised sequence %s in place of #=  in mcq(%d) in question paper file\n", wd, pr->mcq_reqs[k]->no_ops);
                 exit(0);
             }
-            fscanf(P, "%d", &pr->mcq_reqs[k].no_req);
+            fscanf(P, "%d", &pr->mcq_reqs[k]->no_req);
             fscanf(P, "%c", &c);
-            if (c != '}')
+            if (c != '}')               //Reads till "{#=no_req}"
             {
-                printf("Intervening characters before }\n");
+                printf("Intervening characters between #=%d and } in mcq(%d) in question paper file\n", pr->mcq_reqs[k]->no_req, pr->mcq_reqs[k]->no_ops);
                 exit(0);
             }
             fscanf(P, "%c", &c);
             if (c != '{')
             {
-                printf("Intervening characters before {\n");
+                printf("Intervening characters between } and { in mcq(%d) in question paper file\n", pr->mcq_reqs[k]->no_ops);
                 exit(0);
             }
 
             for (int i = 0; i < 8; i++)
                 fscanf(P, "%c", &wd[i]);
             wd[8] = '\0';
-            if (strcmp(wd, "diff in "))
+            if (strcmp(wd, "diff in "))     //Reads "{diff in "
             {
-                printf("Unrecognised sequence %s\n", wd);
+                printf("Unrecognised sequence %s in place of diff in mcq(%d) in question paper file\n", wd, pr->mcq_reqs[k]->no_ops);
                 exit(0);
             }
-            fscanf(P, "%f", &pr->mcq_reqs[k].diff_lb);
+            fscanf(P, "%f", &pr->mcq_reqs[k]->diff_lb); //Reads LB
             fscanf(P, "%c", &c);
-            if (c != ',')
+            if (c != ',')                   //Reads separator ,
             {
-                printf("Unrecognised LB/UB delimiter %c\n", c);
+                printf("Unrecognised LB/UB delimiter %c in mcq(%d) in question paper file\n", c, pr->mcq_reqs[k]->no_ops);
                 exit(0);
             }
-            fscanf(P, "%f", &pr->mcq_reqs[k].diff_ub);
+            fscanf(P, "%f", &pr->mcq_reqs[k]->diff_ub); //Reads LB
             fscanf(P, "%c", &c);
-            if (c != '}')
+            if (c != '}')                    //Reads till "{diff in LB,UB}"
             {
-                printf("UB NaN\n");
+                printf("UB NaN in mcq(%d)\n", pr->mcq_reqs[k]->no_ops);
                 exit(0);
             }
         }
@@ -508,13 +484,13 @@ Paper *parse_paper(FILE *P)
             wd[0] = 'f';
             fscanf(P, "%c%c%c", &wd[1], &wd[2], &wd[3]);
             wd[4] = '\0';
-            if (strcmp(wd, "fitb"))
+            if (strcmp(wd, "fitb"))     //Makes sure type is "fitb"
             {
                 printf("Unrecognised type %s\n", wd);
                 exit(0);
             }
             fscanf(P, "%c", &c);
-            if (c != '}')
+            if (c != '}')               //Reads till "\sample{type=fitb}"
             {
                 printf("Unrecognised type fitb%c\n", c);
                 exit(0);
@@ -522,50 +498,50 @@ Paper *parse_paper(FILE *P)
             fscanf(P, "%c", &c);
             if (c != '{')
             {
-                printf("Intervening characters before {\n");
+                printf("Intervening character %c before } and {\n", c);
                 exit(0);
             }
             fscanf(P, "%c%c", &wd[0], &wd[1]);
             wd[2] = '\0';
-            if (strcmp(wd, "#="))
+            if (strcmp(wd, "#="))       //Reads "#="
             {
-                printf("Unrecognised sequence %s\n", wd);
+                printf("Unrecognised sequence %s in place of #= in fitb in question paper\n", wd);
                 exit(0);
             }
-            fscanf(P, "%d", &pr->fitb_reqs.no_req);
+            fscanf(P, "%d", &pr->fitb_reqs->no_req);
             fscanf(P, "%c", &c);
-            if (c != '}')
+            if (c != '}')               //Reads till "{#=no_req}"
             {
-                printf("No_req NaN");
+                printf("No_req NaN in fitb in question paper\n");
                 exit(0);
             }
             fscanf(P, "%c", &c);
             if (c != '{')
             {
-                printf("Intervening characters before {\n");
+                printf("Intervening characters between #=%d} and { in fitb in question paper\n", pr->fitb_reqs->no_req);
                 exit(0);
             }
 
             for (int i = 0; i < 8; i++)
                 fscanf(P, "%c", &wd[i]);
             wd[8] = '\0';
-            if (strcmp(wd, "diff in "))
+            if (strcmp(wd, "diff in "))     //Reads "{diff in"
             {
-                printf("Unrecognised sequence %s\n", wd);
+                printf("Unrecognised sequence %s in place of diff in fitb in question paper\n", wd);
                 exit(0);
             }
-            fscanf(P, "%f", &pr->fitb_reqs.diff_lb);
+            fscanf(P, "%f", &pr->fitb_reqs->diff_lb); //Reads LB
             fscanf(P, "%c", &c);
             if (c != ',')
             {
-                printf("Unrecognised LB/UB delimiter %c\n", c);
+                printf("Unrecognised LB/UB delimiter %c in fitb in question paper\n", c);
                 exit(0);
             }
-            fscanf(P, "%f", &pr->fitb_reqs.diff_ub);
+            fscanf(P, "%f", &pr->fitb_reqs->diff_ub); //Reads UB
             fscanf(P, "%c", &c);
-            if (c != '}')
+            if (c != '}')               //Reads till "{diff in LB,UB}"
             {
-                printf("UB NaN\n");
+                printf("UB NaN in fitb in question paper\n");
                 exit(0);
             }
         }
@@ -574,62 +550,62 @@ Paper *parse_paper(FILE *P)
             wd[0] = 't';
             fscanf(P, "%c", &wd[1]);
             wd[2] = '\0';
-            if (strcmp(wd, "tf"))
+            if (strcmp(wd, "tf"))       //Makes sure type is "tf"
             {
-                printf("Unrecognised type %s\n", wd);
+                printf("Unrecognised type %s in the question paper\n", wd);
                 exit(0);
             }
             fscanf(P, "%c", &c);
-            if (c != '}')
+            if (c != '}')       //Reads till "\sample{type=tf}"
             {
-                printf("Unrecognised type tf%c\n", c);
+                printf("Unrecognised type tf%c in the question paper\n", c);
                 exit(0);
             }
             fscanf(P, "%c", &c);
             if (c != '{')
             {
-                printf("Intervening characters before {\n");
+                printf("Intervening characters between tf and { in question paper file\n");
                 exit(0);
             }
             fscanf(P, "%c%c", &wd[0], &wd[1]);
             wd[2] = '\0';
-            if (strcmp(wd, "#="))
+            if (strcmp(wd, "#="))   //Reads "#="
             {
-                printf("Unrecognised sequence %s\n", wd);
+                printf("Unrecognised sequence %s in place of #= in tf in question paper file\n", wd);
                 exit(0);
             }
-            fscanf(P, "%d", &pr->tf_reqs.no_req);
+            fscanf(P, "%d", &pr->tf_reqs->no_req);
             fscanf(P, "%c", &c);
-            if (c != '}')
+            if (c != '}')           //Reads till "{#=no_req}"
             {
-                printf("No_req NaN");
+                printf("No_req in tf in question paper file NaN");
                 exit(0);
             }
             fscanf(P, "%c", &c);
             if (c != '{')
             {
-                printf("Intervening characters before {\n");
+                printf("Intervening characters between } and { in fitb in question paper file\n");
                 exit(0);
             }
 
             for (int i = 0; i < 8; i++)
                 fscanf(P, "%c", &wd[i]);
             wd[8] = '\0';
-            if (strcmp(wd, "diff in "))
+            if (strcmp(wd, "diff in "))     //Reads "{diff in"
             {
                 printf("Unrecognised sequence %s\n", wd);
                 exit(0);
             }
-            fscanf(P, "%f", &pr->tf_reqs.diff_lb);
+            fscanf(P, "%f", &pr->tf_reqs->diff_lb); //Reads LB`
             fscanf(P, "%c", &c);
             if (c != ',')
             {
                 printf("Unrecognised LB/UB delimiter %c\n", c);
                 exit(0);
             }
-            fscanf(P, "%f", &pr->tf_reqs.diff_ub);
+            fscanf(P, "%f", &pr->tf_reqs->diff_ub); //Reads UB
             fscanf(P, "%c", &c);
-            if (c != '}')
+            if (c != '}')           //Reads till "{diff in LB,UB}"
             {
                 printf("UB NaN\n");
                 exit(0);
@@ -640,13 +616,13 @@ Paper *parse_paper(FILE *P)
             wd[0] = 'n';
             fscanf(P, "%c%c", &wd[1], &wd[2]);
             wd[3] = '\0';
-            if (strcmp(wd, "num"))
+            if (strcmp(wd, "num"))          //Makes sure type is "num"
             {
                 printf("Unrecognised type %s\n", wd);
                 exit(0);
             }
             fscanf(P, "%c", &c);
-            if (c != '}')
+            if (c != '}')           //Reads till "\sample{type=num}"
             {
                 printf("Unrecognised type num%c\n", c);
                 exit(0);
@@ -654,58 +630,58 @@ Paper *parse_paper(FILE *P)
             fscanf(P, "%c", &c);
             if (c != '{')
             {
-                printf("Intervening characters before {\n");
+                printf("Intervening characters between } and {\n");
                 exit(0);
             }
             fscanf(P, "%c%c", &wd[0], &wd[1]);
             wd[2] = '\0';
-            if (strcmp(wd, "#="))
+            if (strcmp(wd, "#="))       //Reads "#="
             {
-                printf("Unrecognised sequence %s\n", wd);
+                printf("Unrecognised sequence %s in place of #= in num in question paper\n", wd);
                 exit(0);
             }
-            fscanf(P, "%d", &pr->num_reqs.no_req);
+            fscanf(P, "%d", &pr->num_reqs->no_req);
             fscanf(P, "%c", &c);
-            if (c != '}')
+            if (c != '}')           //Reads till "{#=no_req}"
             {
-                printf("No_req NaN");
+                printf("No_req NaN in num in question paper");
                 exit(0);
             }
             fscanf(P, "%c", &c);
             if (c != '{')
             {
-                printf("Intervening characters before {\n");
+                printf("Intervening characters between #=%d} and { in num in question paper\n",pr->num_reqs->no_req);
                 exit(0);
             }
 
             for (int i = 0; i < 8; i++)
                 fscanf(P, "%c", &wd[i]);
             wd[8] = '\0';
-            if (strcmp(wd, "diff in "))
+            if (strcmp(wd, "diff in "))     //Reads "{diff in"
             {
-                printf("Unrecognised sequence %s\n", wd);
+                printf("Unrecognised sequence %s in place of diff in num in question paper\n", wd);
                 exit(0);
             }
-            fscanf(P, "%f", &pr->num_reqs.diff_lb);
+            fscanf(P, "%f", &pr->num_reqs->diff_lb); //Reads LB
             fscanf(P, "%c", &c);
             if (c != ',')
             {
-                printf("Unrecognised LB/UB delimiter %c\n", c);
+                printf("Unrecognised LB/UB delimiter %c in num in question paper\n", c);
                 exit(0);
             }
-            fscanf(P, "%f", &pr->num_reqs.diff_ub);
+            fscanf(P, "%f", &pr->num_reqs->diff_ub); //Reads UB
             fscanf(P, "%c", &c);
-            if (c != '}')
+            if (c != '}')       //Reads till "{diff in LB,UB}"
             {
-                printf("UB NaN\n");
+                printf("UB NaN in num in question paper\n");
                 exit(0);
             }
         }
 
-        fscanf(P, " %c", &c);
+        fscanf(P, " %c", &c);       //Starts reading next request, if any
     }
 
-    fclose(P);
+    fclose(P);          //Closes file
 
     return pr;
 }
@@ -743,7 +719,7 @@ ListNUM parse_NUM(FILE *B, Stack part)
             wd[5] = '\0';
             if (strcmp(wd, "begin"))
             {
-                printf("Unrecognised sequence \\%s\n", wd);
+                printf("Unrecognised sequence \\%s in question bank\n", wd);
                 exit(0);
             }
             fscanf(B, "%c", &c);
@@ -766,7 +742,7 @@ ListNUM parse_NUM(FILE *B, Stack part)
                     fscanf(B, "%c", &c);
                     if (c != '}')
                     {
-                        printf("Unrecognised sequence {%s%c}\n", wd, c);
+                        printf("Unrecognised sequence \\end{%s%c in place of \\end{type} in question bank\n", wd, c);
                         exit(0);
                     }
                     pop(brack);
@@ -778,13 +754,13 @@ ListNUM parse_NUM(FILE *B, Stack part)
                 wd[8] = '\0';
                 if (strcmp(wd, "question"))
                 {
-                    printf("Unrecognised part %s\n", wd);
+                    printf("Unrecognised part {%s in place of \\begin{question; in question bank\n", wd);
                     exit(0);
                 }
                 fscanf(B, "%c", &c);
                 if (c != ';')
                 {
-                    printf("Unrecognised difficulty delimiter\n");
+                    printf("Unrecognised difficulty delimiter %c in question bank\n",c);
                     exit(0);
                 }
 
@@ -798,7 +774,7 @@ ListNUM parse_NUM(FILE *B, Stack part)
                 }
                 else
                 {
-                    printf("Difficulty NaN\n");
+                    printf("Difficulty NaN in question bank\n");
                     exit(0);
                 }
                 push(part, 'q');
@@ -811,7 +787,7 @@ ListNUM parse_NUM(FILE *B, Stack part)
                 wd[8] = '\0';
                 if (strcmp(wd, "question"))
                 {
-                    printf("Unrecognised question terminator {%s}\n", wd);
+                    printf("Unrecognised question terminator {%s in place of {end} in question bank\n", wd);
                     exit(0);
                 }
                 fscanf(B, "%c", &c);
@@ -821,7 +797,7 @@ ListNUM parse_NUM(FILE *B, Stack part)
                 }
                 else
                 {
-                    printf("Unrecognised question terminator {%s}\n", wd);
+                    printf("Unrecognised question terminator {%s%c in place of {end} in question bank\n", wd, c);
                     exit(0);
                 }
                 pop(part);
@@ -833,7 +809,7 @@ ListNUM parse_NUM(FILE *B, Stack part)
             fscanf(B, " %c", &c);
             if (c != '\"')
             {
-                printf("\" missing\n");
+                printf("\" missing before question text; difficulty %f\n", M->diff);
                 exit(0);
             }
 
@@ -853,7 +829,7 @@ ListNUM parse_NUM(FILE *B, Stack part)
 
             if (strcmp(wd, "\\\\"))
             {
-                printf("Unrecognised option delimiter\n");
+                printf("Unrecognised question/answer delimiter %s in question bank; question \"%s\"\n", wd, M->text);
                 exit(0);
             }
 
@@ -868,7 +844,7 @@ ListNUM parse_NUM(FILE *B, Stack part)
 
             if (c != '\\')
             {
-                printf("Unrecognised question terminator\n");
+                printf("Unrecognised question terminator %c in question bank; question \"%s\"\n", c, M->text);
                 exit(0);
             }
 
@@ -877,7 +853,7 @@ ListNUM parse_NUM(FILE *B, Stack part)
             wd[3] = '\0';
             if (strcmp(wd, "end"))
             {
-                printf("Unrecognised sequence \\%s\n", wd);
+                printf("Unrecognised question terminator sequence \\%s; question \"%s\"\n", wd, M->text);
                 exit(0);
             }
 
@@ -928,7 +904,7 @@ ListTF parse_TF(FILE *B, Stack part)
             wd[5] = '\0';
             if (strcmp(wd, "begin"))
             {
-                printf("Unrecognised sequence \\%s\n", wd);
+                printf("Unrecognised sequence \\%s in question bank\n", wd);
                 exit(0);
             }
             fscanf(B, "%c", &c);
@@ -951,7 +927,7 @@ ListTF parse_TF(FILE *B, Stack part)
                     fscanf(B, "%c", &c);
                     if (c != '}')
                     {
-                        printf("Unrecognised sequence {%s%c}\n", wd, c);
+                        printf("Unrecognised sequence \\end{%s%c in place of \\end{type} in question bank\n", wd, c);
                         exit(0);
                     }
                     pop(brack);
@@ -963,13 +939,13 @@ ListTF parse_TF(FILE *B, Stack part)
                 wd[8] = '\0';
                 if (strcmp(wd, "question"))
                 {
-                    printf("Unrecognised part %s\n", wd);
+                    printf("Unrecognised part {%s in place of \\begin{question; in question bank\n", wd);
                     exit(0);
                 }
                 fscanf(B, "%c", &c);
                 if (c != ';')
                 {
-                    printf("Unrecognised difficulty delimiter\n");
+                    printf("Unrecognised difficulty delimiter %c in question bank\n", c);
                     exit(0);
                 }
 
@@ -983,7 +959,7 @@ ListTF parse_TF(FILE *B, Stack part)
                 }
                 else
                 {
-                    printf("Difficulty NaN\n");
+                    printf("Difficulty NaN in question bank\n");
                     exit(0);
                 }
                 push(part, 'q');
@@ -996,7 +972,7 @@ ListTF parse_TF(FILE *B, Stack part)
                 wd[8] = '\0';
                 if (strcmp(wd, "question"))
                 {
-                    printf("Unrecognised question terminator {%s}\n", wd);
+                    printf("Unrecognised question terminator {%s in place of {end} in question bank\n", wd);
                     exit(0);
                 }
                 fscanf(B, "%c", &c);
@@ -1006,7 +982,7 @@ ListTF parse_TF(FILE *B, Stack part)
                 }
                 else
                 {
-                    printf("Unrecognised question terminator {%s}\n", wd);
+                    printf("Unrecognised question terminator {%s%c in place of {end} in question bank\n", wd, c);
                     exit(0);
                 }
                 pop(part);
@@ -1018,7 +994,7 @@ ListTF parse_TF(FILE *B, Stack part)
             fscanf(B, " %c", &c);
             if (c != '\"')
             {
-                printf("\" missing\n");
+                printf("\" missing before question text; difficulty %f\n", M->diff);
                 exit(0);
             }
 
@@ -1038,7 +1014,7 @@ ListTF parse_TF(FILE *B, Stack part)
 
             if (strcmp(wd, "\\\\"))
             {
-                printf("Unrecognised option delimiter\n");
+                printf("Unrecognised question/answer delimiter %s in question bank; question \"%s\"\n", wd, M->text);
                 exit(0);
             }
 
@@ -1053,7 +1029,7 @@ ListTF parse_TF(FILE *B, Stack part)
 
             if (c != '\\')
             {
-                printf("Unrecognised question terminator\n");
+                printf("Unrecognised question terminator %c in question bank; question \"%s\"\n", c, M->text);
                 exit(0);
             }
 
@@ -1062,7 +1038,7 @@ ListTF parse_TF(FILE *B, Stack part)
             wd[3] = '\0';
             if (strcmp(wd, "end"))
             {
-                printf("Unrecognised sequence \\%s\n", wd);
+                printf("Unrecognised question terminator sequence \\%s; question \"%s\"\n", wd, M->text);
                 exit(0);
             }
 
@@ -1113,7 +1089,7 @@ ListFITB parse_FITB(FILE *B, Stack part)
             wd[5] = '\0';
             if (strcmp(wd, "begin"))
             {
-                printf("Unrecognised sequence \\%s\n", wd);
+                printf("Unrecognised sequence \\%s in question bank\n", wd);
                 exit(0);
             }
             fscanf(B, "%c", &c);
@@ -1136,7 +1112,7 @@ ListFITB parse_FITB(FILE *B, Stack part)
                     fscanf(B, "%c", &c);
                     if (c != '}')
                     {
-                        printf("Unrecognised sequence {%s%c}\n", wd, c);
+                        printf("Unrecognised sequence \\end{%s%c in place of \\end{type} in question bank\n", wd, c);
                         exit(0);
                     }
                     pop(brack);
@@ -1148,13 +1124,13 @@ ListFITB parse_FITB(FILE *B, Stack part)
                 wd[8] = '\0';
                 if (strcmp(wd, "question"))
                 {
-                    printf("Unrecognised part %s\n", wd);
+                    printf("Unrecognised part {%s in place of \\begin{question; in question bank\n", wd);
                     exit(0);
                 }
                 fscanf(B, "%c", &c);
                 if (c != ';')
                 {
-                    printf("Unrecognised difficulty delimiter\n");
+                    printf("Unrecognised difficulty delimiter %c in question bank\n", c);
                     exit(0);
                 }
 
@@ -1168,7 +1144,7 @@ ListFITB parse_FITB(FILE *B, Stack part)
                 }
                 else
                 {
-                    printf("Difficulty NaN\n");
+                    printf("Difficulty NaN in question bank\n");
                     exit(0);
                 }
                 push(part, 'q');
@@ -1181,7 +1157,7 @@ ListFITB parse_FITB(FILE *B, Stack part)
                 wd[8] = '\0';
                 if (strcmp(wd, "question"))
                 {
-                    printf("Unrecognised question terminator {%s}\n", wd);
+                    printf("Unrecognised question terminator {%s in place of {end} in question bank\n", wd);
                     exit(0);
                 }
                 fscanf(B, "%c", &c);
@@ -1191,7 +1167,7 @@ ListFITB parse_FITB(FILE *B, Stack part)
                 }
                 else
                 {
-                    printf("Unrecognised question terminator {%s}\n", wd);
+                    printf("Unrecognised question terminator {%s%c in place of {end} in question bank\n", wd, c);
                     exit(0);
                 }
                 pop(part);
@@ -1203,7 +1179,7 @@ ListFITB parse_FITB(FILE *B, Stack part)
             fscanf(B, " %c", &c);
             if (c != '\"')
             {
-                printf("\" missing\n");
+                printf("\" missing before question text; difficulty %f\n", M->diff);
                 exit(0);
             }
 
@@ -1223,14 +1199,14 @@ ListFITB parse_FITB(FILE *B, Stack part)
 
             if (strcmp(wd, "\\\\"))
             {
-                printf("Unrecognised option delimiter\n");
+                printf("Unrecognised question/answer delimiter %s in question bank; question \"%s\"\n", wd, M->text);
                 exit(0);
             }
 
             fscanf(B, " %c", &c);
             if (c != '\"')
             {
-                printf("\" missing\n");
+                printf("\" missing before answer in question bank; question \"%s\"\n", M->text);
                 exit(0);
             }
 
@@ -1253,7 +1229,7 @@ ListFITB parse_FITB(FILE *B, Stack part)
 
             if (c != '\\')
             {
-                printf("Unrecognised question terminator\n");
+                printf("Unrecognised question terminator %c in question bank; question \"%s\"\n", c, M->text);
                 exit(0);
             }
 
@@ -1262,7 +1238,7 @@ ListFITB parse_FITB(FILE *B, Stack part)
             wd[3] = '\0';
             if (strcmp(wd, "end"))
             {
-                printf("Unrecognised sequence \\%s\n", wd);
+                printf("Unrecognised question terminator sequence \\%s; question \"%s\"\n", wd, M->text);
                 exit(0);
             }
 

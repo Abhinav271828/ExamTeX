@@ -17,7 +17,7 @@ FITB *init_FITB();
 TF *init_TF();
 NUM *init_NUM();
 Paper *init_paper();
-void init_request(Request *R);
+Request* init_request();
 
 //Creating nodes
 MCQ *create_MCQ(char *text, float diff);

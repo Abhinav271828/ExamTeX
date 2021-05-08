@@ -92,20 +92,23 @@ Paper *init_paper()
 
     for (int i = 0; i < 11; i++)
     {
-        init_request(&(P->mcq_reqs[i]));
+        P->mcq_reqs[i] = init_request();
     }
 
-    init_request(&(P->fitb_reqs));
-    init_request(&(P->tf_reqs));
-    init_request(&(P->num_reqs));
+    P->fitb_reqs = init_request();
+    P->tf_reqs = init_request();
+    P->num_reqs = init_request();
 
     return P;
 }
 
-void init_request(Request *R)
+Request *init_request()
 {
+    Request *R = (Request *)malloc(sizeof(Request));
     R->no_ops = 0;
     R->no_req = 0;
     R->diff_lb = 0.0f;
     R->diff_ub = 0.0f;
+
+    return R;
 }
