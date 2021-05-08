@@ -45,7 +45,7 @@ void select_FITB(FILE* op, FITB** possible, int found, int no_req);
 void select_TF(FILE* op, TF** possible, int found, int no_req);
 void select_NUM(FILE* op, NUM** possible, int found, int no_req);
 
-void fileput_MCQ(FILE* op, MCQ* M);
+void fileput_MCQ(FILE* op, MCQ* M, int no_ops);
 void fileput_FITB(FILE* op, FITB* M);
 void fileput_TF(FILE* op, TF* M);
 void fileput_NUM(FILE* op, NUM* M);
