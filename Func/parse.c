@@ -74,6 +74,10 @@ Bank *parse_bank(FILE *B)
 
         fscanf(B, " %c", &c);
     }
+
+    fclose(B);
+
+    return bk;
 }
 
 ListMCQ parse_MCQ(FILE *B, Stack part)
@@ -369,7 +373,7 @@ Paper *parse_paper(FILE *P)
     Stack part = create_empty();
     Stack brack = create_empty();
     char wd[10];
-    fscanf(B, "%c", &c);
+    fscanf(P, "%c", &c);
     while (1)
     {
         if (c == '}') break;
@@ -380,7 +384,7 @@ Paper *parse_paper(FILE *P)
         }
 
         for (int i = 0; i < 6; i++)
-            fscanf(B, "%c", &wd[i]);
+            fscanf(P, "%c", &wd[i]);
         wd[6] = '\0';
         if (strcmp(wd, "sample"))
         {
@@ -388,32 +392,32 @@ Paper *parse_paper(FILE *P)
             exit(0);
         }
 
-        fscanf(B, "%c", &c);
+        fscanf(P, "%c", &c);
         if (c != '{')
         {
             printf("Unrecognised sample%c\n", c);
             exit(0);
         }
         for (int i = 0; i < 5; i++)
-            fscanf(B, "%c", &wd[i]);
+            fscanf(P, "%c", &wd[i]);
         wd[5] = '\0';
         if (strcmp(wd, "type="))
         {
             printf("Unrecognised sequence %s\n", wd);
             exit(0);
         }
-        fscanf(B, "%c", &c);
+        fscanf(P, "%c", &c);
         if (c == 'm')
         {
             wd[0] = 'm';
-            fscanf(B, "%c%c", &wd[1], &wd[2]);
+            fscanf(P, "%c%c", &wd[1], &wd[2]);
             wd[3] = '\0';
             if (strcmp(wd, "mcq"))
             {
                 printf("Unrecognised type %s\n", wd);
                 exit(0);
             }
-            fscanf(B, "%c", &c);
+            fscanf(P, "%c", &c);
             if (c != '(')
             {
                 printf("No_ops not given\n");
@@ -427,40 +431,40 @@ Paper *parse_paper(FILE *P)
                 printf("Too many mcq requests!\n");
                 exit(0);
             }
-            fscanf(B, "%d", &pr->mcq_reqs[k].no_ops);
-            fscanf(B, "%c", &c);
+            fscanf(P, "%d", &pr->mcq_reqs[k].no_ops);
+            fscanf(P, "%c", &c);
             if (c != ')')
             {
                 printf("No_ops NaN\n");
                 exit(0);
             }
-            fscanf(B, "%c", &c);
+            fscanf(P, "%c", &c);
             if (c != '}')
             {
                 printf("Intervening characters before }\n");
                 exit(0);
             }
-            fscanf(B, "%c", &c);
+            fscanf(P, "%c", &c);
             if (c != '{')
             {
                 printf("Intervening characters before {\n");
                 exit(0);
             }
-            fscanf(B, "%c%c", &wd[0], &wd[1]);
+            fscanf(P, "%c%c", &wd[0], &wd[1]);
             wd[2] = '\0';
             if (strcmp(wd, "#="))
             {
                 printf("Unrecognised sequence %s\n", wd);
                 exit(0);
             }
-            fscanf(B, "%d", &pr->mcq_reqs[k].no_req);
-            fscanf(B, "%c", &c);
+            fscanf(P, "%d", &pr->mcq_reqs[k].no_req);
+            fscanf(P, "%c", &c);
             if (c != '}')
             {
                 printf("Intervening characters before }\n");
                 exit(0);
             }
-            fscanf(B, "%c", &c);
+            fscanf(P, "%c", &c);
             if (c != '{')
             {
                 printf("Intervening characters before {\n");
@@ -468,21 +472,21 @@ Paper *parse_paper(FILE *P)
             }
 
             for (int i = 0; i < 8; i++)
-                fscanf(B, "%c", &wd[i]);
+                fscanf(P, "%c", &wd[i]);
             wd[8] = '\0';
             if (strcmp(wd, "diff in "))
             {
                 printf("Unrecognised sequence %s\n", wd);
                 exit(0);
             }
-            fscanf(B, "%d", &pr->mcq_reqs[k].diff_lb);
-            fscanf(B, "%c", &c) if (c != ',')
+            fscanf(P, "%d", &pr->mcq_reqs[k].diff_lb);
+            fscanf(P, "%c", &c) if (c != ',')
             {
                 printf("Unrecognised LB/UB delimiter %c\n", c);
                 exit(0);
             }
-            fscanf(B, "%d", &pr->mcq_reqs[k].diff_ub);
-            fscanf(B, "%c", &c);
+            fscanf(P, "%d", &pr->mcq_reqs[k].diff_ub);
+            fscanf(P, "%c", &c);
             if (c != '}')
             {
                 printf("UB NaN\n");
@@ -492,40 +496,40 @@ Paper *parse_paper(FILE *P)
         if (c == 'f')
         {
             wd[0] = 'f';
-            fscanf(B, "%c%c%c", &wd[1], &wd[2], &wd[3]);
+            fscanf(P, "%c%c%c", &wd[1], &wd[2], &wd[3]);
             wd[4] = '\0';
             if (strcmp(wd, "fitb"))
             {
                 printf("Unrecognised type %s\n", wd);
                 exit(0);
             }
-            fscanf(B, "%c", &c);
+            fscanf(P, "%c", &c);
             if (c != '}')
             {
                 printf("Unrecognised type fitb%c\n", c);
                 exit(0);
             }
-            fscanf(B, "%c", &c);
+            fscanf(P, "%c", &c);
             if (c != '{')
             {
                 printf("Intervening characters before {\n");
                 exit(0);
             }
-            fscanf(B, "%c%c", &wd[0], &wd[1]);
+            fscanf(P, "%c%c", &wd[0], &wd[1]);
             wd[2] = '\0';
             if (strcmp(wd, "#="))
             {
                 printf("Unrecognised sequence %s\n", wd);
                 exit(0);
             }
-            fscanf(B, "%d", &pr->fitb_reqs.no_req);
-            fscanf(B, "%c", &c);
+            fscanf(P, "%d", &pr->fitb_reqs.no_req);
+            fscanf(P, "%c", &c);
             if (c != '}')
             {
                 printf("No_req NaN");
                 exit(0);
             }
-            fscanf(B, "%c", &c);
+            fscanf(P, "%c", &c);
             if (c != '{')
             {
                 printf("Intervening characters before {\n");
@@ -533,21 +537,21 @@ Paper *parse_paper(FILE *P)
             }
 
             for (int i = 0; i < 8; i++)
-                fscanf(B, "%c", &wd[i]);
+                fscanf(P, "%c", &wd[i]);
             wd[8] = '\0';
             if (strcmp(wd, "diff in "))
             {
                 printf("Unrecognised sequence %s\n", wd);
                 exit(0);
             }
-            fscanf(B, "%d", &pr->fitb_reqs.diff_lb);
-            fscanf(B, "%c", &c) if (c != ',')
+            fscanf(P, "%d", &pr->fitb_reqs.diff_lb);
+            fscanf(P, "%c", &c) if (c != ',')
             {
                 printf("Unrecognised LB/UB delimiter %c\n", c);
                 exit(0);
             }
-            fscanf(B, "%d", &pr->fitb_reqs.diff_ub);
-            fscanf(B, "%c", &c);
+            fscanf(P, "%d", &pr->fitb_reqs.diff_ub);
+            fscanf(P, "%c", &c);
             if (c != '}')
             {
                 printf("UB NaN\n");
@@ -557,40 +561,40 @@ Paper *parse_paper(FILE *P)
         if (c == 't')
         {
             wd[0] = 't';
-            fscanf(B, "%c", &wd[1]);
+            fscanf(P, "%c", &wd[1]);
             wd[2] = '\0';
             if (strcmp(wd, "tf"))
             {
                 printf("Unrecognised type %s\n", wd);
                 exit(0);
             }
-            fscanf(B, "%c", &c);
+            fscanf(P, "%c", &c);
             if (c != '}')
             {
                 printf("Unrecognised type tf%c\n", c);
                 exit(0);
             }
-            fscanf(B, "%c", &c);
+            fscanf(P, "%c", &c);
             if (c != '{')
             {
                 printf("Intervening characters before {\n");
                 exit(0);
             }
-            fscanf(B, "%c%c", &wd[0], &wd[1]);
+            fscanf(P, "%c%c", &wd[0], &wd[1]);
             wd[2] = '\0';
             if (strcmp(wd, "#="))
             {
                 printf("Unrecognised sequence %s\n", wd);
                 exit(0);
             }
-            fscanf(B, "%d", &pr->tf_reqs.no_req);
-            fscanf(B, "%c", &c);
+            fscanf(P, "%d", &pr->tf_reqs.no_req);
+            fscanf(P, "%c", &c);
             if (c != '}')
             {
                 printf("No_req NaN");
                 exit(0);
             }
-            fscanf(B, "%c", &c);
+            fscanf(P, "%c", &c);
             if (c != '{')
             {
                 printf("Intervening characters before {\n");
@@ -598,21 +602,21 @@ Paper *parse_paper(FILE *P)
             }
 
             for (int i = 0; i < 8; i++)
-                fscanf(B, "%c", &wd[i]);
+                fscanf(P, "%c", &wd[i]);
             wd[8] = '\0';
             if (strcmp(wd, "diff in "))
             {
                 printf("Unrecognised sequence %s\n", wd);
                 exit(0);
             }
-            fscanf(B, "%d", &pr->tf_reqs.diff_lb);
-            fscanf(B, "%c", &c) if (c != ',')
+            fscanf(P, "%d", &pr->tf_reqs.diff_lb);
+            fscanf(P, "%c", &c) if (c != ',')
             {
                 printf("Unrecognised LB/UB delimiter %c\n", c);
                 exit(0);
             }
-            fscanf(B, "%d", &pr->tf_reqs.diff_ub);
-            fscanf(B, "%c", &c);
+            fscanf(P, "%d", &pr->tf_reqs.diff_ub);
+            fscanf(P, "%c", &c);
             if (c != '}')
             {
                 printf("UB NaN\n");
@@ -622,40 +626,40 @@ Paper *parse_paper(FILE *P)
         if (c == 't')
         {
             wd[0] = 't';
-            fscanf(B, "%c%c", &wd[1], &wd[2]);
+            fscanf(P, "%c%c", &wd[1], &wd[2]);
             wd[3] = '\0';
             if (strcmp(wd, "num"))
             {
                 printf("Unrecognised type %s\n", wd);
                 exit(0);
             }
-            fscanf(B, "%c", &c);
+            fscanf(P, "%c", &c);
             if (c != '}')
             {
                 printf("Unrecognised type num%c\n", c);
                 exit(0);
             }
-            fscanf(B, "%c", &c);
+            fscanf(P, "%c", &c);
             if (c != '{')
             {
                 printf("Intervening characters before {\n");
                 exit(0);
             }
-            fscanf(B, "%c%c", &wd[0], &wd[1]);
+            fscanf(P, "%c%c", &wd[0], &wd[1]);
             wd[2] = '\0';
             if (strcmp(wd, "#="))
             {
                 printf("Unrecognised sequence %s\n", wd);
                 exit(0);
             }
-            fscanf(B, "%d", &pr->num_reqs.no_req);
-            fscanf(B, "%c", &c);
+            fscanf(P, "%d", &pr->num_reqs.no_req);
+            fscanf(P, "%c", &c);
             if (c != '}')
             {
                 printf("No_req NaN");
                 exit(0);
             }
-            fscanf(B, "%c", &c);
+            fscanf(P, "%c", &c);
             if (c != '{')
             {
                 printf("Intervening characters before {\n");
@@ -663,21 +667,21 @@ Paper *parse_paper(FILE *P)
             }
 
             for (int i = 0; i < 8; i++)
-                fscanf(B, "%c", &wd[i]);
+                fscanf(P, "%c", &wd[i]);
             wd[8] = '\0';
             if (strcmp(wd, "diff in "))
             {
                 printf("Unrecognised sequence %s\n", wd);
                 exit(0);
             }
-            fscanf(B, "%d", &pr->num_reqs.diff_lb);
-            fscanf(B, "%c", &c) if (c != ',')
+            fscanf(P, "%d", &pr->num_reqs.diff_lb);
+            fscanf(P, "%c", &c) if (c != ',')
             {
                 printf("Unrecognised LB/UB delimiter %c\n", c);
                 exit(0);
             }
-            fscanf(B, "%d", &pr->num_reqs.diff_ub);
-            fscanf(B, "%c", &c);
+            fscanf(P, "%d", &pr->num_reqs.diff_ub);
+            fscanf(P, "%c", &c);
             if (c != '}')
             {
                 printf("UB NaN\n");
@@ -685,8 +689,10 @@ Paper *parse_paper(FILE *P)
             }
         }
 
-        fscanf(B, " %c", &c);
+        fscanf(P, " %c", &c);
     }
+
+    fclose(P);
 
     return pr;
 }
