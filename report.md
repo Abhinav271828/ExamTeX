@@ -1,12 +1,12 @@
 # ExamTeX
 DSA Miniproject Report, Spring 2021, IIIT Hyderabad
 
-Group number: 17
-Group members:
-Nukit Tailor ()
-Abhinav S Menon (2020114001)
-Sreya Garapati ()
-Tarun Jindal ()
+Group number: 17  
+Group members:  
+Nukit Tailor ()  
+Abhinav S Menon (2020114001)  
+Sreya Garapati ()  
+Tarun Jindal ()  
 
 ## Data Structures Used
 Each question type is represented by a different struct, containing all the necessary information. There is also a struct for the question bank, and one for the question paper. Further, there is a struct for a "request" of a number of questions of a certain difficulty and (in the case of MCQs) having a certain number of options.  

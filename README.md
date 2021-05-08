@@ -46,7 +46,7 @@ The syntax of the question paper file is as follows: a "request" for each type o
 
 In the case of MCQs, the number of options required must be given in parentheses (e.g. `mcq(3)`).  
 
-Note that wherever there are spaces, identation or newlines in the format, the user may put any number (0 or more) of whitespace characters (spaces, tabs or newlines). However, where there are no spaces, spaces should not be inserted.  
+Note that wherever there are spaces, indentation or newlines in the format, the user may put any number (0 or more) of whitespace characters (spaces, tabs or newlines). However, where there are no spaces, spaces should not be inserted.  
 
 ## Running Test Cases
 For compiling the program, `cd` into the repo and run the `make` command. To run it, execute `./a.out`. If you want to run one of the included tests, please enter the file path at the prompt as follows:
