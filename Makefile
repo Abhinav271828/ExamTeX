@@ -11,7 +11,7 @@ DEPS = $(IDIR)/*.h
 a.out: $(ODIR)/main.o $(ODIR)/generate.o $(ODIR)/init.o $(ODIR)/insert.o $(ODIR)/stack.o $(ODIR)/parse.o 
 	$(CC) -o $@ $^
 
-$(ODIR)/main.o: main.c $(DEPS_1)
+$(ODIR)/main.o: main.c
 	$(CC) -c -o $@ $<
 
 $(ODIR)/generate.o: $(SDIR)/generate.c $(DEPS_1)
