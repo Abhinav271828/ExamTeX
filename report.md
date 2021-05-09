@@ -31,14 +31,29 @@ The last bracket is the difficulty range; this begins with the sequence `diff in
 
 ### Output File Generation
 For each request, the bank is filtered into an array of questions satisfying the conditions, keeping track of the number. If the total is less than the number requested, nothing of the type is printed; else, the requested number is randomly selected from the array. Then each question is printed.  
-In case of MCQs, the correct and wrong options are shuffled and printed, but their individual orders are unchanged. That is, `corr_op1` would never come after `corr_op2`, but any number of wrong options may come in between them.  
+In case of MCQs, the selection as well as the order of correct and wrong options is randomised.  
+
+## Future Versions
+Some features that can be added to this project in the future are:  
+* Marks file  
+    Since the correct answer to each question is stored in the bank, answer sheets (in a certain format) can be parsed and graded. According to the percentage of students who got a certain question correct, that questions difficulty "score" can be updated. Based on this score and the predicted difficulty, a new difficulty can be calculated.   
+    
+* Line numbers
+    The position of syntax errors in the bank and paper files can be made more clear by displaying the line number. In C, this means counting the number of newline characters until the position of the error.   
+    
+* Appending questions to output file  
+    When an existing filename is given as the output filename, it is erased and the questions are added. It is possible, however, to insert the new questions in the relevant sections of the output file if it already has some (*i.e.*, new true/false questions in the true/false section, and so on).  
+    
+* Avoid repetition of questions
+    If MCQs of two different numbers of options are requested (say $m$ and $n$), it is possible for a question having total numbers of options greater than $m$ and $n$ to be added in *both* the sections. This is not desirable; if the program can keep track of which MCQs have been printed in a certain paper, it can be avoided.
+
 
 ## Division of Work
 Each member worked on the functions relating to a certain question type:  
 * MCQ: Abhinav  
 * Numerical: Nukit  
 * True/False: Sreya  
-* Fill-in-the-blank: Tarun.  
+* Fill-in-the-blanks: Tarun.  
 
 For each type, these were the functions made:
 * initialisation (`init_type()`)
