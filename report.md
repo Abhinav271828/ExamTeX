@@ -3,10 +3,10 @@ DSA Miniproject Report, Spring 2021, IIIT Hyderabad
 
 Group number: 17  
 Group members:  
-Nukit Tailor ()  
-Abhinav S Menon (2020114001)  
-Sreya Garapati ()  
-Tarun Jindal ()  
+* Nukit Tailor (2020114012)  
+* Abhinav S Menon (2020114001)  
+* Sreya Garapati (2020102055)  
+* Tarun Jindal (2020102056)  
 
 ## Data Structures Used
 Each question type is represented by a different struct, containing all the necessary information. There is also a struct for the question bank, and one for the question paper. Further, there is a struct for a "request" of a number of questions of a certain difficulty and (in the case of MCQs) having a certain number of options.  
@@ -39,5 +39,13 @@ Each member worked on the functions relating to a certain question type:
 * Numerical: Nukit  
 * True/False: Sreya  
 * Fill-in-the-blank: Tarun.  
-For each type, these were the initialisation (`init_type()`), node-creation (`create_type()`), insertion (`insertType()`), finding (`find_type()`), selection (`select_type()`), and printing (`fileput_type()`) functions.
+
+For each type, these were the functions made:
+* initialisation (`init_type()`)
+* node-creation (`create_type()`)
+* insertion (`insertType()`) 
+* finding (`find_type()`) 
+* selection (`select_type()`)
+* printing (`fileput_type()`).
+
 `main()`, `parse_bank()` and `parse_paper()` were written by Nukit and Abhinav.

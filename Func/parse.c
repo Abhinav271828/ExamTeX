@@ -140,7 +140,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                 for (int i = 0; i < 4; i++)
                     fscanf(B, "%c", &wd[i]);
                 wd[4] = '\0';
-                if (!strcmp(wd, "type"))    // Checks for "\begin{type"
+                if (!strcmp(wd, "type"))    // Checks for "type"
                 {
                     fscanf(B, "%c", &c);
                     if (c != '}')
@@ -188,7 +188,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                 for (int i = 0; i < 8; i++)
                     fscanf(B, "%c", &wd[i]);
                 wd[8] = '\0';
-                if (strcmp(wd, "question")) 
+                if (strcmp(wd, "question"))     // checks "question"
                 {
                     printf("Unrecognised question terminator {%s in place of {question} in question bank\n", wd);
                     exit(0);
@@ -217,26 +217,26 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
             }
             pos = 0;
             fscanf(B, "%c", &c);
-            while (c != '\"')
+            while (c != '\"')           // starts reading the questions' text
             {
                 text[pos++] = c;
                 fscanf(B, "%c", &c);
             }
             text[pos] = '\0';
             M->text = (char *)malloc(strlen(text) * sizeof(char));
-            strcpy(M->text, text);
+            strcpy(M->text, text);      // copies the questions' text to linked lists' node
 
-            fscanf(B, " %c%c", &wd[0], &wd[1]);
-            wd[2] = '\0';
+            fscanf(B, " %c%c", &wd[0], &wd[1]);     // trying to read the "\\" after the 
+            wd[2] = '\0';                           // question's text.
 
-            if (strcmp(wd, "\\\\"))
+            if (strcmp(wd, "\\\\"))     
             {
                 printf("Unrecognised question/option delimiter %s in question bank; question \"%s\"\n", wd, M->text);
                 exit(0);
             }
 
             opcount = 0;
-            fscanf(B, " %c", &c);
+            fscanf(B, " %c", &c);       // reading the " before the first correct option
             if (c != '\"')
             {
                 printf("\" missing before correct option 1 in question bank; question \"%s\"\n", M->text);
@@ -244,7 +244,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
             }
             pos = 0;
             fscanf(B, "%c", &c);
-            while (c != '\"')
+            while (c != '\"')               // reading the option
             {
                 text[pos++] = c;
                 fscanf(B, "%c", &c);
@@ -252,14 +252,14 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
             text[pos] = '\0';
             M->corr = (char **)malloc(sizeof(char *));
             M->corr[0] = (char *)malloc(strlen(text) * sizeof(char));
-            strcpy(M->corr[0], text);
-            opcount++;
+            strcpy(M->corr[0], text);                            // copying opton to the linked list
+            opcount++;                                           // increasing the count of the options
 
-            fscanf(B, " %c", &c);
-
+            fscanf(B, " %c", &c);               // checking the "&" which is
+                                                // being used to separate options 
             while (c == '&')
             {
-                fscanf(B, " %c", &c);
+                fscanf(B, " %c", &c);           // reading the " before the option
                 if (c != '\"')
                 {
                     printf("\" missing before correct option %d in question bank; question \"%s\"\n", opcount, M->text);
@@ -267,7 +267,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                 }
                 pos = 0;
                 fscanf(B, "%c", &c);
-                while (c != '\"')
+                while (c != '\"')               // reading the option
                 {
                     text[pos++] = c;
                     fscanf(B, "%c", &c);
@@ -275,12 +275,13 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                 text[pos] = '\0';
                 M->corr = (char **)realloc(M->corr, (opcount + 1) * sizeof(char *));
                 M->corr[opcount] = (char *)malloc(strlen(text) * sizeof(char));
-                strcpy(M->corr[opcount++], text);
-
+                strcpy(M->corr[opcount++], text);       // copying the option to the linked list
+                                                        // and increasing the count of the options
                 fscanf(B, " %c", &c);
             }
 
-            M->no_corr = opcount;
+            M->no_corr = opcount;           // till now read only correct options
+                                            // hence total options = correct options 
 
             if (c != '\\')
             {
@@ -291,17 +292,17 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
             fscanf(B, "%c", &c);
             if (c != '\\')
             {
-                printf("Unrecognised correct option delimiter \\%c in question bank; question \"%s\"\n", c, M->text);
+                printf("Unrecognised correct/wrong option delimiter \\%c in question bank; question \"%s\"\n", c, M->text);
                 exit(0);
             }
 
-            opcount = 0;
+            opcount = 0;                    // intialisation to 0 as will be used again for wrong options
 
             fscanf(B, " %c", &c);
             M->wrong = (char **)malloc(sizeof(char *));
             if (c == '\"')
             {
-                fseek(B, -1L, SEEK_CUR);
+                fseek(B, -1L, SEEK_CUR);            // goes back 1 letter in the file
                 c = '&';
                 while (c == '&')
                 {
@@ -313,7 +314,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                     }
                     pos = 0;
                     fscanf(B, "%c", &c);
-                    while (c != '\"')
+                    while (c != '\"')          // starts reading the wrong options
                     {
                         text[pos++] = c;
                         fscanf(B, "%c", &c);
@@ -321,14 +322,14 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                     text[pos] = '\0';
                     M->wrong = (char **)realloc(M->wrong, (opcount + 1) * sizeof(char *));
                     M->wrong[opcount] = (char *)malloc(strlen(text) * sizeof(char));
-                    strcpy(M->wrong[opcount++], text);
+                    strcpy(M->wrong[opcount++], text);      // coppying the test of wrong option to the linked list
 
-                    fscanf(B, " %c", &c);
+                    fscanf(B, " %c", &c);        //checks if more options are available 
                 }
             }
-            M->no_ops = M->no_corr + opcount;
-            InsertMCQ(L, M);
-            M = init_MCQ();
+            M->no_ops = M->no_corr + opcount;               // updates the total options count in the linked list
+
+            InsertMCQ(L, M);            // updates the linked list with insertion of new entries
 
             if (c != '\\')
             {
@@ -345,6 +346,8 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                 exit(0);
             }
 
+            M = init_MCQ();             // initialsation to dummy state again
+
             fscanf(B, "%c", &c);
             if (c == '{')
             {
@@ -353,7 +356,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
             }
         }
 
-        fscanf(B, " %c", &c);
+        fscanf(B, " %c", &c);   // will read the "\" before begin or end
     }
 
     return L;
@@ -376,10 +379,10 @@ ListFITB parse_FITB(FILE *B, Stack part)
     {
         if (c == '\\')
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++)         
                 fscanf(B, "%c", &wd[i]);
             wd[3] = '\0';
-            if (!strcmp(wd, "end"))
+            if (!strcmp(wd, "end"))         // Checks for "\end"
             {
                 fscanf(B, "%c", &c);
                 if (c == '{')
@@ -391,7 +394,7 @@ ListFITB parse_FITB(FILE *B, Stack part)
             for (int i = 3; i < 5; i++)
                 fscanf(B, "%c", &wd[i]);
             wd[5] = '\0';
-            if (strcmp(wd, "begin"))
+            if (strcmp(wd, "begin"))        // Checks for "\begin"
             {
                 printf("Unrecognised sequence \\%s in question bank\n", wd);
                 exit(0);
@@ -406,14 +409,14 @@ ListFITB parse_FITB(FILE *B, Stack part)
 
         if (top(brack) == '{')
         {
-            if (top(part) == 't')
+            if (top(part) == 't')       // 't' represents type
             {
                 for (int i = 0; i < 4; i++)
                     fscanf(B, "%c", &wd[i]);
                 wd[4] = '\0';
-                if (!strcmp(wd, "type"))
+                if (!strcmp(wd, "type"))               // Checks for "type"
                 {
-                    fscanf(B, "%c", &c);
+                    fscanf(B, "%c", &c);        
                     if (c != '}')
                     {
                         printf("Unrecognised sequence \\end{%s%c in place of \\end{type} in question bank\n", wd, c);
@@ -426,7 +429,7 @@ ListFITB parse_FITB(FILE *B, Stack part)
                 for (int i = 4; i < 8; i++)
                     fscanf(B, "%c", &wd[i]);
                 wd[8] = '\0';
-                if (strcmp(wd, "question"))
+                if (strcmp(wd, "question"))               //Checks for "question"
                 {
                     printf("Unrecognised part {%s in place of \\begin{question; in question bank\n", wd);
                     exit(0);
@@ -438,8 +441,8 @@ ListFITB parse_FITB(FILE *B, Stack part)
                     exit(0);
                 }
 
-                fscanf(B, "%f", &diff);
-                M->diff = diff;
+                fscanf(B, "%f", &diff);     // reads the difficulty of the question
+                M->diff = diff;             //copying the difficulty to the linked list
 
                 fscanf(B, "%c", &c);
                 if (c == '}')
@@ -459,14 +462,14 @@ ListFITB parse_FITB(FILE *B, Stack part)
                 for (int i = 0; i < 8; i++)
                     fscanf(B, "%c", &wd[i]);
                 wd[8] = '\0';
-                if (strcmp(wd, "question"))
+                if (strcmp(wd, "question"))         //checks for "question"
                 {
                     printf("Unrecognised question terminator {%s in place of {end} in question bank\n", wd);
                     exit(0);
                 }
-                fscanf(B, "%c", &c);
-                if (c == '}')
-                {
+                fscanf(B, "%c", &c);            
+                if (c == '}')                           // completes the reading of 
+                {                                       // "\begin{question;diff}"
                     pop(brack);
                 }
                 else
@@ -489,17 +492,17 @@ ListFITB parse_FITB(FILE *B, Stack part)
 
             pos = 0;
             fscanf(B, "%c", &c);
-            while (c != '\"')
+            while (c != '\"')           // starts reading the questions' text
             {
                 text[pos++] = c;
                 fscanf(B, "%c", &c);
             }
             text[pos] = '\0';
             M->text = (char *)malloc((strlen(text) + 1) * sizeof(char));
-            strcpy(M->text, text);
+            strcpy(M->text, text);      // copies the questions' text to linked lists' node
 
-            fscanf(B, " %c%c", &wd[0], &wd[1]);
-            wd[2] = '\0';
+            fscanf(B, " %c%c", &wd[0], &wd[1]);         // trying to read the "\\" after the 
+            wd[2] = '\0';                               // questions's text
 
             if (strcmp(wd, "\\\\"))
             {
@@ -515,19 +518,17 @@ ListFITB parse_FITB(FILE *B, Stack part)
             }
 
             pos = 0;
-            fscanf(B, "%c", &c);
-            while (c != '\"')
+            fscanf(B, "%c", &c);        
+            while (c != '\"')           // reads the correct option
             {
                 text[pos++] = c;
                 fscanf(B, "%c", &c);
             }
             text[pos] = '\0';
             M->ans = (char *)malloc((strlen(text) + 1) * sizeof(char));
-            strcpy(M->ans, text);
+            strcpy(M->ans, text);           // copies answer to the linked list
 
-            InsertFITB(L, M);
-
-            M = init_FITB();
+            InsertFITB(L, M);               // updates the linked list with insertion of new entries
 
             fscanf(B, " %c", &c);
 
@@ -545,6 +546,8 @@ ListFITB parse_FITB(FILE *B, Stack part)
                 printf("Unrecognised question terminator sequence \\%s; question \"%s\"\n", wd, M->text);
                 exit(0);
             }
+            
+            M = init_FITB();                // initialsation to dummy state again
 
             fscanf(B, "%c", &c);
             if (c == '{')
@@ -554,7 +557,7 @@ ListFITB parse_FITB(FILE *B, Stack part)
             }
         }
 
-        fscanf(B, " %c", &c);
+        fscanf(B, " %c", &c);               // will read the "\" before begin or end
     }
 
     return L;
@@ -577,10 +580,10 @@ ListTF parse_TF(FILE *B, Stack part)
     {
         if (c == '\\')
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++) 
                 fscanf(B, "%c", &wd[i]);
             wd[3] = '\0';
-            if (!strcmp(wd, "end"))
+            if (!strcmp(wd, "end"))                 // Checks for "\end"
             {
                 fscanf(B, "%c", &c);
                 if (c == '{')
@@ -592,7 +595,7 @@ ListTF parse_TF(FILE *B, Stack part)
             for (int i = 3; i < 5; i++)
                 fscanf(B, "%c", &wd[i]);
             wd[5] = '\0';
-            if (strcmp(wd, "begin"))
+            if (strcmp(wd, "begin"))                // Checks for "\begin"
             {
                 printf("Unrecognised sequence \\%s in question bank\n", wd);
                 exit(0);
@@ -607,12 +610,12 @@ ListTF parse_TF(FILE *B, Stack part)
 
         if (top(brack) == '{')
         {
-            if (top(part) == 't')
+            if (top(part) == 't')                   // 't' represents type
             {
                 for (int i = 0; i < 4; i++)
                     fscanf(B, "%c", &wd[i]);
                 wd[4] = '\0';
-                if (!strcmp(wd, "type"))
+                if (!strcmp(wd, "type"))            // Checks for "type" 
                 {
                     fscanf(B, "%c", &c);
                     if (c != '}')
@@ -627,7 +630,7 @@ ListTF parse_TF(FILE *B, Stack part)
                 for (int i = 4; i < 8; i++)
                     fscanf(B, "%c", &wd[i]);
                 wd[8] = '\0';
-                if (strcmp(wd, "question"))
+                if (strcmp(wd, "question"))              //Checks for "question"
                 {
                     printf("Unrecognised part {%s in place of \\begin{question; in question bank\n", wd);
                     exit(0);
@@ -639,8 +642,8 @@ ListTF parse_TF(FILE *B, Stack part)
                     exit(0);
                 }
 
-                fscanf(B, "%f", &diff);
-                M->diff = diff;
+                fscanf(B, "%f", &diff);                 // reads the difficulty of the question
+                M->diff = diff;                         //copying the difficulty to the linked list
 
                 fscanf(B, "%c", &c);
                 if (c == '}')
@@ -660,14 +663,14 @@ ListTF parse_TF(FILE *B, Stack part)
                 for (int i = 0; i < 8; i++)
                     fscanf(B, "%c", &wd[i]);
                 wd[8] = '\0';
-                if (strcmp(wd, "question"))
+                if (strcmp(wd, "question"))             //checks for "question"
                 {
                     printf("Unrecognised question terminator {%s in place of {end} in question bank\n", wd);
                     exit(0);
                 }
                 fscanf(B, "%c", &c);
-                if (c == '}')
-                {
+                if (c == '}')                           // completes the reading of 
+                {                                       // "\begin{question;diff}"
                     pop(brack);
                 }
                 else
@@ -690,30 +693,28 @@ ListTF parse_TF(FILE *B, Stack part)
 
             pos = 0;
             fscanf(B, "%c", &c);
-            while (c != '\"')
+            while (c != '\"')                       // starts reading the questions' text
             {
                 text[pos++] = c;
                 fscanf(B, "%c", &c);
             }
             text[pos] = '\0';
             M->text = (char *)malloc((strlen(text) + 1) * sizeof(char));
-            strcpy(M->text, text);
+            strcpy(M->text, text);                  // copies the questions' text to linked lists' node
 
-            fscanf(B, " %c%c", &wd[0], &wd[1]);
+            fscanf(B, " %c%c", &wd[0], &wd[1]);     
             wd[2] = '\0';
 
-            if (strcmp(wd, "\\\\"))
+            if (strcmp(wd, "\\\\"))                     //read the "\\" after the questions text
             {
                 printf("Unrecognised question/answer delimiter %s in question bank; question \"%s\"\n", wd, M->text);
                 exit(0);
             }
 
-            fscanf(B, " %c", &ans);
-            M->ans = ans;
+            fscanf(B, " %c", &ans); 
+            M->ans = ans;                           // copies answer to the linked list    
 
-            InsertTF(L, M);
-
-            M = init_TF();
+            InsertTF(L, M);                         // updates the linked list with insertion of new entries
 
             fscanf(B, " %c", &c);
 
@@ -732,6 +733,8 @@ ListTF parse_TF(FILE *B, Stack part)
                 exit(0);
             }
 
+            M = init_TF();                           // initialsation to dummy state again
+
             fscanf(B, "%c", &c);
             if (c == '{')
             {
@@ -740,7 +743,7 @@ ListTF parse_TF(FILE *B, Stack part)
             }
         }
 
-        fscanf(B, " %c", &c);
+        fscanf(B, " %c", &c);                       // will read the "\" before begin or end
     }
     return L;
 }
@@ -765,7 +768,7 @@ ListNUM parse_NUM(FILE *B, Stack part)
             for (int i = 0; i < 3; i++)
                 fscanf(B, "%c", &wd[i]);
             wd[3] = '\0';
-            if (!strcmp(wd, "end"))
+            if (!strcmp(wd, "end"))                     // Checks for "\end"
             {
                 fscanf(B, "%c", &c);
                 if (c == '{')
@@ -777,7 +780,7 @@ ListNUM parse_NUM(FILE *B, Stack part)
             for (int i = 3; i < 5; i++)
                 fscanf(B, "%c", &wd[i]);
             wd[5] = '\0';
-            if (strcmp(wd, "begin"))
+            if (strcmp(wd, "begin"))                    // Checks for "\begin"
             {
                 printf("Unrecognised sequence \\%s in question bank\n", wd);
                 exit(0);
@@ -792,12 +795,12 @@ ListNUM parse_NUM(FILE *B, Stack part)
 
         if (top(brack) == '{')
         {
-            if (top(part) == 't')
+            if (top(part) == 't')                       // 't' represents type
             {
                 for (int i = 0; i < 4; i++)
                     fscanf(B, "%c", &wd[i]);
                 wd[4] = '\0';
-                if (!strcmp(wd, "type"))
+                if (!strcmp(wd, "type"))                // Checks for "type" 
                 {
                     fscanf(B, "%c", &c);
                     if (c != '}')
@@ -812,7 +815,7 @@ ListNUM parse_NUM(FILE *B, Stack part)
                 for (int i = 4; i < 8; i++)
                     fscanf(B, "%c", &wd[i]);
                 wd[8] = '\0';
-                if (strcmp(wd, "question"))
+                if (strcmp(wd, "question"))             //Checks for "question"
                 {
                     printf("Unrecognised part {%s in place of \\begin{question; in question bank\n", wd);
                     exit(0);
@@ -824,8 +827,8 @@ ListNUM parse_NUM(FILE *B, Stack part)
                     exit(0);
                 }
 
-                fscanf(B, "%f", &diff);
-                M->diff = diff;
+                fscanf(B, "%f", &diff);                     // reads the difficulty of the question
+                M->diff = diff;                             //copying the difficulty to the linked list
 
                 fscanf(B, "%c", &c);
                 if (c == '}')
@@ -845,14 +848,14 @@ ListNUM parse_NUM(FILE *B, Stack part)
                 for (int i = 0; i < 8; i++)
                     fscanf(B, "%c", &wd[i]);
                 wd[8] = '\0';
-                if (strcmp(wd, "question"))
+                if (strcmp(wd, "question"))                 //checks for "question"
                 {
                     printf("Unrecognised question terminator {%s in place of {end} in question bank\n", wd);
                     exit(0);
                 }
                 fscanf(B, "%c", &c);
-                if (c == '}')
-                {
+                if (c == '}')                               // completes the reading of 
+                {                                           // "\begin{question;diff}"
                     pop(brack);
                 }
                 else
@@ -867,7 +870,7 @@ ListNUM parse_NUM(FILE *B, Stack part)
         if (top(part) == 'q')
         {
             fscanf(B, " %c", &c);
-            if (c != '\"')
+            if (c != '\"')              
             {
                 printf("\" missing before question text; difficulty %f\n", M->diff);
                 exit(0);
@@ -875,30 +878,28 @@ ListNUM parse_NUM(FILE *B, Stack part)
 
             pos = 0;
             fscanf(B, "%c", &c);
-            while (c != '\"')
+            while (c != '\"')                       // starts reading the questions' text
             {
                 text[pos++] = c;
                 fscanf(B, "%c", &c);
             }
             text[pos] = '\0';
             M->text = (char *)malloc((strlen(text) + 1) * sizeof(char));
-            strcpy(M->text, text);
+            strcpy(M->text, text);                  // copies the questions' text to linked lists' node
 
             fscanf(B, " %c%c", &wd[0], &wd[1]);
             wd[2] = '\0';
 
-            if (strcmp(wd, "\\\\"))
+            if (strcmp(wd, "\\\\"))                 //read the "\\" after the questions text
             {
                 printf("Unrecognised question/answer delimiter %s in question bank; question \"%s\"\n", wd, M->text);
                 exit(0);
             }
 
             fscanf(B, " %d", &ans);
-            M->ans = ans;
+            M->ans = ans;                           // copies answer to the linked list
 
-            InsertNUM(L, M);
-
-            M = init_NUM();
+            InsertNUM(L, M);                        // updates the linked list with insertion of new entries
 
             fscanf(B, " %c", &c);
 
@@ -917,6 +918,8 @@ ListNUM parse_NUM(FILE *B, Stack part)
                 exit(0);
             }
 
+            M = init_NUM();                         // initialsation to dummy state again
+
             fscanf(B, "%c", &c);
             if (c == '{')
             {
@@ -925,7 +928,7 @@ ListNUM parse_NUM(FILE *B, Stack part)
             }
         }
 
-        fscanf(B, " %c", &c);
+        fscanf(B, " %c", &c);                       // will read the "\" before begin or end
     }
     return L;
 }
