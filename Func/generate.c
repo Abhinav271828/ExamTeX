@@ -62,31 +62,79 @@ void select_MCQ(FILE *op, MCQ **possible, int found, int no_req, int no_ops)
     fprintf(op, "--------------------\n");              //End of section
 }
 
-void fileput_MCQ(FILE *op, MCQ *M, int no_ops)
-{
+void fileput_MCQ(FILE* op, MCQ *M, int no_ops)
+{ 
     srand(time(0));
     int r, corr = 0, wrong = 0;
+    int lb, ub;
+    int size_c = M->no_corr;                                         //corr_pr contains randomly selected options, which are
+    char* corr_pr[size_c]; char* corr_shuf[size_c];                  //shuffled and put into corr_shuf
+    int size_w = M->no_ops - size_c;    
+    char* wrong_pr[size_w]; char* wrong_shuf[size_w];
+    int size_c2, size_w2;
+    for (int i = 0; i < size_c; i++) corr_pr[i] = M->corr[i];       //starts with all available options;
+    for (int i = 0; i < size_w; i++) wrong_pr[i] = M->wrong[i];     //the number to be printed is randomly selected
+        
+    lb = (no_ops - size_w >= 1) ? no_ops - size_w : 1;              //lower and upper bounds for selecting the
+    ub = (size_c >= no_ops) ? no_ops : size_c;                      //number of correct options to print
 
-    fprintf(op, "%s\n", M->text);                                           //Print question text
+    if (ub == lb) corr = lb;
+    else corr = (rand() % (ub - lb)) + lb;                          //number of correct options to print
+    wrong = no_ops - corr;                                          
 
-    for (int i = 0; i < no_ops; i++)
-    {
-        if (corr < M->no_corr && wrong < M->no_ops - M->no_corr)            //Shuffles options and
-        {                                                                   //prints until either
-            r = rand() % 2;                                                 //correct or wrong
-            if (r == 0)                                                     //options are over; then
-            {                                                               //prints remaining correct
-                fprintf(op, "   %c) %s\n", i + 97, M->corr[corr++]);        //options and remaining
-            }                                                               //wrong options
-            if (r == 1)
+    while (size_c != corr)                      //Removing options
+    {                                           //from corr_pr until
+        r = rand() % size_c;                    //only required 
+        for (int i = r; i < size_c; i++)        //number is left
+            corr_pr[i] = corr_pr[i+1];
+        size_c--;
+    }
+    while (size_w != wrong)                     //Removing options
+    {                                           //from wrong_pr until
+        r = rand() % size_w;                    //only required
+        for (int i = r; i < size_w; i++)        //number is left
+            wrong_pr[i] = wrong_pr[i+1];
+        size_w--;
+    }
+
+    corr = 0; wrong = 0;
+    size_c2 = size_c; size_w2 = size_w;
+    while (corr != size_c)                                      //Shuffling corr_pr
+    {                                                           //and putting in
+        r = rand() % size_c2; corr_shuf[corr++] = corr_pr[r];   //corr_shuf
+        for (int i = r; i < size_c2; i++)
+            corr_pr[i] = corr_pr[i+1];
+        size_c2--;
+    }
+    while (wrong != size_w)                                       //Shuffling wrong_pr
+    {                                                             //and putting in
+        r = rand() % size_w2; wrong_shuf[wrong++] = wrong_pr[r];  //wrong_shuf
+        for (int i = r; i < size_w2; i++)
+            wrong_pr[i] = wrong_pr[i+1];
+        size_w2--;
+    }
+
+    fprintf(op, "%s\n", M->text);                                  //Print question text
+
+    corr = 0; wrong = 0;
+    for (int i = 0; i < no_ops; i++)                                            //Print options
+    {                                                                           //with indentation
+        if (corr < size_c && wrong < size_w)                                    //and indexed by
+        {                                                                       //a, b, c etc
+            r = rand() % 2;                                                     //
+            if (r == 0)                                                         //Randomly prints
+            {                                                                   //either a correct
+                fprintf(op, "   %c) %s\n", i + 97, corr_shuf[corr++]);          //or a wrong one
+            }                                                                   //at each iter until
+            if (r == 1)                                                         //either one is over
             {
-                fprintf(op, "   %c) %s\n", i + 97, M->wrong[wrong++]);
+                fprintf(op, "   %c) %s\n", i + 97, wrong_shuf[wrong++]);
             }
         }
-        else if (wrong >= M->no_ops - M->no_corr)
-            fprintf(op, "   %c) %s\n", i + 97, M->corr[corr++]);
+        else if (wrong == size_w)
+            fprintf(op, "   %c) %s\n", i + 97, corr_shuf[corr++]);
         else
-            fprintf(op, "   %c) %s\n", i + 97, M->wrong[wrong++]);
+            fprintf(op, "   %c) %s\n", i + 97, wrong_shuf[wrong++]);
     }
 }
 
