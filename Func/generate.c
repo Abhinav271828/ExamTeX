@@ -5,32 +5,32 @@
 void find_MCQ(FILE *op, Paper *P, Bank *B)
 {
     MCQ *trav;
-    MCQ **possible = (MCQ **)malloc(sizeof(MCQ *));
+    MCQ **possible = (MCQ **)malloc(sizeof(MCQ *));         //Will store the suitable questions [array]
     int found = 0;
     int no_req, no_ops;
     for (int i = 0; i < 11; i++)
     {
-        no_req = P->mcq_reqs[i]->no_req;
+        no_req = P->mcq_reqs[i]->no_req;                    //To avoid repeatedly accessing
         no_ops = P->mcq_reqs[i]->no_ops;
-        if (no_req == 0)
+        if (no_req == 0)                                    //All mcq requests done
         {
             break;
         }
-        trav = B->mcq_list->next;
+        trav = B->mcq_list->next;                           
         found = 0;
 
-        while (trav != NULL)
-        {
-            if (trav->no_ops >= no_ops && trav->diff >= P->mcq_reqs[i]->diff_lb &&
-                trav->diff <= P->mcq_reqs[i]->diff_ub)
-            {
+        while (trav != NULL)                                                          //Traverse through linked
+        {                                                                             //list and add suitable
+            if (trav->no_ops >= no_ops && trav->diff >= P->mcq_reqs[i]->diff_lb &&    //questions to array using
+                trav->diff <= P->mcq_reqs[i]->diff_ub)                                //realloc; "found" stores
+            {                                                                         //total number found
                 possible = (MCQ **)realloc(possible, (found + 1) * sizeof(MCQ *));
                 possible[found++] = trav;
             }
 
             trav = trav->next;
         }
-        if (found < no_req)
+        if (found < no_req)                         //Not enough
         {
             printf("Not enough MCQs (%d found, %d required), not adding!\n", found, no_req);
         }
@@ -46,20 +46,20 @@ void select_MCQ(FILE *op, MCQ **possible, int found, int no_req, int no_ops)
 {
     int rem;
     srand(time(0));
-    while (found != no_req)
-    {
-        rem = rand() % found;
-        for (int i = rem; i < found - 1; i++)
-            possible[i] = possible[i + 1];
+    while (found != no_req)                             //Randomly removes
+    {                                                   //questions from
+        rem = rand() % found;                           //possible array
+        for (int i = rem; i < found - 1; i++)           //until required
+            possible[i] = possible[i + 1];              //number is left
         found--;
     }
-    fprintf(op, "MCQ with %d options:\n", no_ops);
-    for (int i = 0; i < found; i++)
-    {
-        fprintf(op, "%d) ", i + 1);
-        fileput_MCQ(op, possible[i], no_ops);
+    fprintf(op, "MCQ with %d options:\n", no_ops);      //Section heading
+    for (int i = 0; i < found; i++)                 //Prints each
+    {                                               //question and
+        fprintf(op, "%d) ", i + 1);                 //its options
+        fileput_MCQ(op, possible[i], no_ops);       
     }
-    fprintf(op, "--------------------\n");
+    fprintf(op, "--------------------\n");              //End of section
 }
 
 void fileput_MCQ(FILE *op, MCQ *M, int no_ops)
@@ -67,17 +67,17 @@ void fileput_MCQ(FILE *op, MCQ *M, int no_ops)
     srand(time(0));
     int r, corr = 0, wrong = 0;
 
-    fprintf(op, "%s\n", M->text);
+    fprintf(op, "%s\n", M->text);                                           //Print question text
 
     for (int i = 0; i < no_ops; i++)
     {
-        if (corr < M->no_corr && wrong < M->no_ops - M->no_corr)
-        {
-            r = rand() % 2;
-            if (r == 0)
-            {
-                fprintf(op, "   %c) %s\n", i + 97, M->corr[corr++]);
-            }
+        if (corr < M->no_corr && wrong < M->no_ops - M->no_corr)            //Shuffles options and
+        {                                                                   //prints until either
+            r = rand() % 2;                                                 //correct or wrong
+            if (r == 0)                                                     //options are over; then
+            {                                                               //prints remaining correct
+                fprintf(op, "   %c) %s\n", i + 97, M->corr[corr++]);        //options and remaining
+            }                                                               //wrong options
             if (r == 1)
             {
                 fprintf(op, "   %c) %s\n", i + 97, M->wrong[wrong++]);
@@ -93,25 +93,25 @@ void fileput_MCQ(FILE *op, MCQ *M, int no_ops)
 void find_FITB(FILE *op, Paper *P, Bank *B)
 {
     FITB *trav;
-    FITB **possible = (FITB **)malloc(sizeof(FITB *));
+    FITB **possible = (FITB **)malloc(sizeof(FITB *));          //Stores the suitable questions [array]
     int found = 0;
     int no_req;
-    no_req = P->fitb_reqs->no_req;
+    no_req = P->fitb_reqs->no_req;                              //To avoid repeatedly accessing
     trav = B->fitb_list->next;
     found = 0;
 
-    while (trav != NULL)
-    {
-        if (trav->diff >= P->fitb_reqs->diff_lb && trav->diff <= P->fitb_reqs->diff_ub)
-        {
-            possible = (FITB **)realloc(possible, (found + 1) * sizeof(FITB *));
+    while (trav != NULL)                                                                    //Traverse through linked
+    {                                                                                       //list and add suitable
+        if (trav->diff >= P->fitb_reqs->diff_lb && trav->diff <= P->fitb_reqs->diff_ub)     //questions to array using
+        {                                                                                   //realloc; "found" stores
+            possible = (FITB **)realloc(possible, (found + 1) * sizeof(FITB *));                                                                                       //total number found
             possible[found++] = trav;
         }
 
         trav = trav->next;
     }
 
-    if (found < no_req)
+    if (found < no_req)                     //Not enough
     {
         printf("Not enough FITBs (%d found, %d required), not adding!\n", found, no_req);
     }
@@ -126,51 +126,51 @@ void select_FITB(FILE *op, FITB **possible, int found, int no_req)
 {
     int rem;
     srand(time(0));
-    while (found != no_req)
-    {
-        rem = rand() % found;
-        for (int i = rem; i < found - 1; i++)
-            possible[i] = possible[i + 1];
+    while (found != no_req)                         //Randomly removes
+    {                                               //questions from
+        rem = rand() % found;                       //possible array
+        for (int i = rem; i < found - 1; i++)       //until required
+            possible[i] = possible[i + 1];          //number is left
         found--;
     }
-    fprintf(op, "FITB:\n");
-    for (int i = 0; i < found; i++)
-    {
-        fprintf(op, "%d) ", i + 1);
+    fprintf(op, "FITB:\n");                         //Section heading
+    for (int i = 0; i < found; i++)             //Prints
+    {                                           //each
+        fprintf(op, "%d) ", i + 1);             //question
         fileput_FITB(op, possible[i]);
     }
-    fprintf(op, "--------------------\n");
+    fprintf(op, "--------------------\n");          //End of section
 }
 
 void fileput_FITB(FILE *op, FITB *F)
 {
     srand(time(0));
     int r, corr = 0, wrong = 0;
-    fprintf(op, "%s\n", F->text);
+    fprintf(op, "%s\n", F->text);               //Only print question text
 }
 
 void find_TF(FILE *op, Paper *P, Bank *B)
 {
     TF *trav;
-    TF **possible = (TF **)malloc(sizeof(TF *));
+    TF **possible = (TF **)malloc(sizeof(TF *));        //Stores the suitable questions [array]
     int found = 0;
     int no_req;
-    no_req = P->tf_reqs->no_req;
+    no_req = P->tf_reqs->no_req;                        //To avoid repeatedly accessing
     trav = B->tf_list->next;
     found = 0;
 
-    while (trav != NULL)
-    {
-        if (trav->diff >= P->tf_reqs->diff_lb && trav->diff <= P->tf_reqs->diff_ub)
-        {
-            possible = (TF **)realloc(possible, (found + 1) * sizeof(TF *));
+    while (trav != NULL)                                                                //Traverse through linked   
+    {                                                                                   //list and add suitable 
+        if (trav->diff >= P->tf_reqs->diff_lb && trav->diff <= P->tf_reqs->diff_ub)     //questions to array using
+        {                                                                               //realloc; "found" stores  
+            possible = (TF **)realloc(possible, (found + 1) * sizeof(TF *));            //total number found
             possible[found++] = trav;
         }
 
         trav = trav->next;
     }
 
-    if (found < no_req)
+    if (found < no_req)                                 //Not enough
     {
         printf("Not enough TFs (%d found, %d required), not adding!\n", found, no_req);
     }
@@ -185,50 +185,50 @@ void select_TF(FILE *op, TF **possible, int found, int no_req)
 {
     int rem;
     srand(time(0));
-    while (found != no_req)
-    {
-        rem = rand() % found;
-        for (int i = rem; i < found - 1; i++)
-            possible[i] = possible[i + 1];
+    while (found != no_req)                         //Randomly removes
+    {                                               //questions from
+        rem = rand() % found;                       //possible array
+        for (int i = rem; i < found - 1; i++)       //until required
+            possible[i] = possible[i + 1];          //number is left
         found--;
     }
-    fprintf(op, "TF:\n");
-    for (int i = 0; i < found; i++)
-    {
-        fprintf(op, "%d) ", i + 1);
+    fprintf(op, "TF:\n");                           //Section heading
+    for (int i = 0; i < found; i++)         //Prints
+    {                                       //each
+        fprintf(op, "%d) ", i + 1);         //question
         fileput_TF(op, possible[i]);
     }
-    fprintf(op, "--------------------\n");
+    fprintf(op, "--------------------\n");          //End of section
 }
 
 void fileput_TF(FILE *op, TF *T)
 {
     srand(time(0));
     int r, corr = 0, wrong = 0;
-    fprintf(op, "%s\n", T->text);
+    fprintf(op, "%s\n", T->text);               //Only print question text
 }
 
 void find_NUM(FILE *op, Paper *P, Bank *B)
 {
     NUM *trav;
-    NUM **possible = (NUM **)malloc(sizeof(NUM *));
+    NUM **possible = (NUM **)malloc(sizeof(NUM *));     //Stores the suitable question [array]
     int found = 0;
     int no_req;
-    no_req = P->num_reqs->no_req;
+    no_req = P->num_reqs->no_req;                       //To avoid repeatedly accessing
     trav = B->num_list->next;
     found = 0;
 
-    while (trav != NULL)
-    {
-        if (trav->diff >= P->num_reqs->diff_lb && trav->diff <= P->num_reqs->diff_ub)
-        {
-            possible = (NUM **)realloc(possible, (found + 1) * sizeof(NUM *));
+    while (trav != NULL)                                                                 //Traverse through linked  
+    {                                                                                    //list and add suitable  
+        if (trav->diff >= P->num_reqs->diff_lb && trav->diff <= P->num_reqs->diff_ub)    //questions to array using
+        {                                                                                //realloc; "found" stores
+            possible = (NUM **)realloc(possible, (found + 1) * sizeof(NUM *));           //total number found
             possible[found++] = trav;
         }
 
         trav = trav->next;
     }
-    if (found < no_req)
+    if (found < no_req)                                 //Not enough
     {
         printf("Not enough NUMs (%d found, %d required), not adding!\n", found, no_req);
     }
@@ -243,25 +243,25 @@ void select_NUM(FILE *op, NUM **possible, int found, int no_req)
 {
     int rem;
     srand(time(0));
-    while (found != no_req)
-    {
-        rem = rand() % found;
-        for (int i = rem; i < found - 1; i++)
-            possible[i] = possible[i + 1];
+    while (found != no_req)                         //Randomly removes
+    {                                               //questions from
+        rem = rand() % found;                       //possible array
+        for (int i = rem; i < found - 1; i++)       //until required
+            possible[i] = possible[i + 1];          //number is left
         found--;
     }
-    fprintf(op, "NUM:\n");
-    for (int i = 0; i < found; i++)
-    {
-        fprintf(op, "%d) ", i + 1);
+    fprintf(op, "NUM:\n");                          //Section heading
+    for (int i = 0; i < found; i++)         //Prints
+    {                                       //each
+        fprintf(op, "%d) ", i + 1);         //question
         fileput_NUM(op, possible[i]);
     }
-    fprintf(op, "--------------------\n");
+    fprintf(op, "--------------------\n");          //End of section
 }
 
 void fileput_NUM(FILE *op, NUM *N)
 {
     srand(time(0));
     int r, corr = 0, wrong = 0;
-    fprintf(op, "%s\n", N->text);
+    fprintf(op, "%s\n", N->text);               //Only print question
 }
