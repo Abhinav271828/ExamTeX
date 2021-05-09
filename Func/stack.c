@@ -1,5 +1,6 @@
 #include "../Headers/stack.h"
 
+// Pushes value on the stack
 void push(Stack S, char val)
 {
     PtrToNode new = create_node(val);
@@ -7,6 +8,7 @@ void push(Stack S, char val)
     S->next = new;
 }
 
+// Pops a value off the stack
 char pop(Stack S)
 {
     char c = S->next->part;
@@ -14,6 +16,7 @@ char pop(Stack S)
     return c;
 }
 
+// Creates an empty stack
 Stack create_empty()
 {
     PtrToNode temp;
@@ -22,6 +25,9 @@ Stack create_empty()
     temp->next = NULL;
     return temp;
 }
+
+// Helps in pushing a value on the stack
+// by creating a new node
 PtrToNode create_node(char val)
 {
     Node *val1;
@@ -31,6 +37,7 @@ PtrToNode create_node(char val)
     return val1;
 }
 
+// Tells the top-most value on the stack
 char top(Stack S)
 {
     return (S->next->part);

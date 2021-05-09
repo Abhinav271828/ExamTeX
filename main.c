@@ -19,12 +19,15 @@ int main(void)
     printf("Enter output filename: ");
     scanf("%s", output);
 
-    bk = fopen(bank, "r");
+    // Opens the question bank in read mode 
+    bk = fopen(bank, "r");                                 
     if (bk == NULL)
     {
         printf("Bank file %s failed to open.\n", bank);
         exit(0);
     }
+
+    // Opens the question paper in read mode 
     pr = fopen(paper, "r");
     if (pr == NULL)
     {
@@ -32,12 +35,15 @@ int main(void)
         exit(0);
     }
 
+    // Starts reading the question bank
     B = parse_bank(bk);
-    printf("Bank parsed\n");
+    printf("Bank parsed successfully.\n");
 
+    // Starts reading the question paper
     P = parse_paper(pr);
-    printf("Paper parsed\n");
+    printf("Paper parsed successfully.\n");
 
+    // Opens the output file in write mode
     op = fopen(output, "w");
     if (op == NULL)
     {
@@ -46,9 +52,22 @@ int main(void)
     }
     printf("Output file opened in write mode\n");
 
+    // Finds MCQ type question to 
+    // be added in the Output file
     find_MCQ(op, P, B);
+
+    // Finds Fill in the blank type question to 
+    // be added in the Output file
     find_FITB(op, P, B);
+
+    // Finds True/False type question to 
+    // be added in the Output file
     find_TF(op, P, B);
+
+    // Finds Numerical type question to 
+    // be added in the Output file
     find_NUM(op, P, B);
+
+    // Closes the Output file
     fclose(op);
 }

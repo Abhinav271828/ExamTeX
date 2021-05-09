@@ -2,6 +2,14 @@
 #include "../Headers/stack.h"
 #include "../Headers/structs.h"
 
+//###################################################//
+//###################################################//
+//#### Opening the sample file of the particular  ###//
+//####  part while reading this code extends the  ###//
+//#### understanding of the code even furthur.    ###//
+//###################################################//
+//###################################################//
+
 Bank *parse_bank(FILE *B)
 {
     Bank *bk = init_bank();
@@ -100,7 +108,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
             for (int i = 0; i < 3; i++)
                 fscanf(B, "%c", &wd[i]);
             wd[3] = '\0';
-            if (!strcmp(wd, "end"))
+            if (!strcmp(wd, "end"))     // Checks for "\end"
             {
                 fscanf(B, "%c", &c);
                 if (c == '{')
@@ -112,7 +120,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
             for (int i = 3; i < 5; i++)
                 fscanf(B, "%c", &wd[i]);
             wd[5] = '\0';
-            if (strcmp(wd, "begin"))
+            if (strcmp(wd, "begin"))        // Checks for "\begin"
             {
                 printf("Unrecognised sequence \\%s in question bank\n", wd);
                 exit(0);
@@ -127,12 +135,12 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
 
         if (top(brack) == '{')
         {
-            if (top(part) == 't')
+            if (top(part) == 't')       // 't' represents type
             {
                 for (int i = 0; i < 4; i++)
                     fscanf(B, "%c", &wd[i]);
                 wd[4] = '\0';
-                if (!strcmp(wd, "type"))
+                if (!strcmp(wd, "type"))    // Checks for "\begin{type"
                 {
                     fscanf(B, "%c", &c);
                     if (c != '}')
@@ -147,7 +155,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                 for (int i = 4; i < 8; i++)
                     fscanf(B, "%c", &wd[i]);
                 wd[8] = '\0';
-                if (strcmp(wd, "question"))
+                if (strcmp(wd, "question"))     //Checks for "\begin{question"
                 {
                     printf("Unrecognised part {%s in place of \\begin{question; in question bank\n", wd);
                     exit(0);
@@ -159,12 +167,12 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                     exit(0);
                 }
 
-                fscanf(B, "%f", &diff);
+                fscanf(B, "%f", &diff);     // reads the difficulty of the question
                 M->diff = diff;
 
                 fscanf(B, "%c", &c);
-                if (c == '}')
-                {
+                if (c == '}')           // completes the reading of 
+                {                       // "\begin{question;diff}"
                     pop(brack);
                 }
                 else
@@ -172,7 +180,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                     printf("Difficulty NaN in question bank\n");
                     exit(0);
                 }
-                push(part, 'q');
+                push(part, 'q');        // 'q' represents question
             }
 
             else if (top(part) == 'q')
@@ -180,9 +188,9 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                 for (int i = 0; i < 8; i++)
                     fscanf(B, "%c", &wd[i]);
                 wd[8] = '\0';
-                if (strcmp(wd, "question"))
+                if (strcmp(wd, "question")) 
                 {
-                    printf("Unrecognised question terminator {%s in place of {end} in question bank\n", wd);
+                    printf("Unrecognised question terminator {%s in place of {question} in question bank\n", wd);
                     exit(0);
                 }
                 fscanf(B, "%c", &c);
@@ -192,7 +200,7 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
                 }
                 else
                 {
-                    printf("Unrecognised question terminator {%s%c in place of {end} in question bank\n", wd, c);
+                    printf("Unrecognised question terminator {%s%c in place of {question} in question bank\n", wd, c);
                     exit(0);
                 }
                 pop(part);
@@ -348,6 +356,577 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
         fscanf(B, " %c", &c);
     }
 
+    return L;
+}
+
+ListFITB parse_FITB(FILE *B, Stack part)
+{
+    char c;
+    char *ans;
+    char wd[10];
+    char text[50];
+    float diff;
+    int pos;
+    Stack brack = create_empty();
+    ListFITB L = init_FITB();
+    FITB *M = init_FITB();
+
+    fscanf(B, " %c", &c);
+    while (1)
+    {
+        if (c == '\\')
+        {
+            for (int i = 0; i < 3; i++)
+                fscanf(B, "%c", &wd[i]);
+            wd[3] = '\0';
+            if (!strcmp(wd, "end"))
+            {
+                fscanf(B, "%c", &c);
+                if (c == '{')
+                {
+                    push(brack, c);
+                    continue;
+                }
+            }
+            for (int i = 3; i < 5; i++)
+                fscanf(B, "%c", &wd[i]);
+            wd[5] = '\0';
+            if (strcmp(wd, "begin"))
+            {
+                printf("Unrecognised sequence \\%s in question bank\n", wd);
+                exit(0);
+            }
+            fscanf(B, "%c", &c);
+            if (c == '{')
+            {
+                push(brack, c);
+                continue;
+            }
+        }
+
+        if (top(brack) == '{')
+        {
+            if (top(part) == 't')
+            {
+                for (int i = 0; i < 4; i++)
+                    fscanf(B, "%c", &wd[i]);
+                wd[4] = '\0';
+                if (!strcmp(wd, "type"))
+                {
+                    fscanf(B, "%c", &c);
+                    if (c != '}')
+                    {
+                        printf("Unrecognised sequence \\end{%s%c in place of \\end{type} in question bank\n", wd, c);
+                        exit(0);
+                    }
+                    pop(brack);
+                    pop(part);
+                    break;
+                }
+                for (int i = 4; i < 8; i++)
+                    fscanf(B, "%c", &wd[i]);
+                wd[8] = '\0';
+                if (strcmp(wd, "question"))
+                {
+                    printf("Unrecognised part {%s in place of \\begin{question; in question bank\n", wd);
+                    exit(0);
+                }
+                fscanf(B, "%c", &c);
+                if (c != ';')
+                {
+                    printf("Unrecognised difficulty delimiter %c in question bank\n", c);
+                    exit(0);
+                }
+
+                fscanf(B, "%f", &diff);
+                M->diff = diff;
+
+                fscanf(B, "%c", &c);
+                if (c == '}')
+                {
+                    pop(brack);
+                }
+                else
+                {
+                    printf("Difficulty NaN in question bank\n");
+                    exit(0);
+                }
+                push(part, 'q');
+            }
+
+            else if (top(part) == 'q')
+            {
+                for (int i = 0; i < 8; i++)
+                    fscanf(B, "%c", &wd[i]);
+                wd[8] = '\0';
+                if (strcmp(wd, "question"))
+                {
+                    printf("Unrecognised question terminator {%s in place of {end} in question bank\n", wd);
+                    exit(0);
+                }
+                fscanf(B, "%c", &c);
+                if (c == '}')
+                {
+                    pop(brack);
+                }
+                else
+                {
+                    printf("Unrecognised question terminator {%s%c in place of {end} in question bank\n", wd, c);
+                    exit(0);
+                }
+                pop(part);
+            }
+        }
+
+        if (top(part) == 'q')
+        {
+            fscanf(B, " %c", &c);
+            if (c != '\"')
+            {
+                printf("\" missing before question text; difficulty %f\n", M->diff);
+                exit(0);
+            }
+
+            pos = 0;
+            fscanf(B, "%c", &c);
+            while (c != '\"')
+            {
+                text[pos++] = c;
+                fscanf(B, "%c", &c);
+            }
+            text[pos] = '\0';
+            M->text = (char *)malloc((strlen(text) + 1) * sizeof(char));
+            strcpy(M->text, text);
+
+            fscanf(B, " %c%c", &wd[0], &wd[1]);
+            wd[2] = '\0';
+
+            if (strcmp(wd, "\\\\"))
+            {
+                printf("Unrecognised question/answer delimiter %s in question bank; question \"%s\"\n", wd, M->text);
+                exit(0);
+            }
+
+            fscanf(B, " %c", &c);
+            if (c != '\"')
+            {
+                printf("\" missing before answer in question bank; question \"%s\"\n", M->text);
+                exit(0);
+            }
+
+            pos = 0;
+            fscanf(B, "%c", &c);
+            while (c != '\"')
+            {
+                text[pos++] = c;
+                fscanf(B, "%c", &c);
+            }
+            text[pos] = '\0';
+            M->ans = (char *)malloc((strlen(text) + 1) * sizeof(char));
+            strcpy(M->ans, text);
+
+            InsertFITB(L, M);
+
+            M = init_FITB();
+
+            fscanf(B, " %c", &c);
+
+            if (c != '\\')
+            {
+                printf("Unrecognised question terminator %c in question bank; question \"%s\"\n", c, M->text);
+                exit(0);
+            }
+
+            for (int i = 0; i < 3; i++)
+                fscanf(B, "%c", &wd[i]);
+            wd[3] = '\0';
+            if (strcmp(wd, "end"))
+            {
+                printf("Unrecognised question terminator sequence \\%s; question \"%s\"\n", wd, M->text);
+                exit(0);
+            }
+
+            fscanf(B, "%c", &c);
+            if (c == '{')
+            {
+                push(brack, '{');
+                continue;
+            }
+        }
+
+        fscanf(B, " %c", &c);
+    }
+
+    return L;
+}
+
+ListTF parse_TF(FILE *B, Stack part)
+{
+    char c;
+    char ans;
+    char wd[10];
+    char text[50];
+    float diff;
+    int pos;
+    Stack brack = create_empty();
+    ListTF L = init_TF();
+    TF *M = init_TF();
+
+    fscanf(B, " %c", &c);
+    while (1)
+    {
+        if (c == '\\')
+        {
+            for (int i = 0; i < 3; i++)
+                fscanf(B, "%c", &wd[i]);
+            wd[3] = '\0';
+            if (!strcmp(wd, "end"))
+            {
+                fscanf(B, "%c", &c);
+                if (c == '{')
+                {
+                    push(brack, c);
+                    continue;
+                }
+            }
+            for (int i = 3; i < 5; i++)
+                fscanf(B, "%c", &wd[i]);
+            wd[5] = '\0';
+            if (strcmp(wd, "begin"))
+            {
+                printf("Unrecognised sequence \\%s in question bank\n", wd);
+                exit(0);
+            }
+            fscanf(B, "%c", &c);
+            if (c == '{')
+            {
+                push(brack, c);
+                continue;
+            }
+        }
+
+        if (top(brack) == '{')
+        {
+            if (top(part) == 't')
+            {
+                for (int i = 0; i < 4; i++)
+                    fscanf(B, "%c", &wd[i]);
+                wd[4] = '\0';
+                if (!strcmp(wd, "type"))
+                {
+                    fscanf(B, "%c", &c);
+                    if (c != '}')
+                    {
+                        printf("Unrecognised sequence \\end{%s%c in place of \\end{type} in question bank\n", wd, c);
+                        exit(0);
+                    }
+                    pop(brack);
+                    pop(part);
+                    break;
+                }
+                for (int i = 4; i < 8; i++)
+                    fscanf(B, "%c", &wd[i]);
+                wd[8] = '\0';
+                if (strcmp(wd, "question"))
+                {
+                    printf("Unrecognised part {%s in place of \\begin{question; in question bank\n", wd);
+                    exit(0);
+                }
+                fscanf(B, "%c", &c);
+                if (c != ';')
+                {
+                    printf("Unrecognised difficulty delimiter %c in question bank\n", c);
+                    exit(0);
+                }
+
+                fscanf(B, "%f", &diff);
+                M->diff = diff;
+
+                fscanf(B, "%c", &c);
+                if (c == '}')
+                {
+                    pop(brack);
+                }
+                else
+                {
+                    printf("Difficulty NaN in question bank\n");
+                    exit(0);
+                }
+                push(part, 'q');
+            }
+
+            else if (top(part) == 'q')
+            {
+                for (int i = 0; i < 8; i++)
+                    fscanf(B, "%c", &wd[i]);
+                wd[8] = '\0';
+                if (strcmp(wd, "question"))
+                {
+                    printf("Unrecognised question terminator {%s in place of {end} in question bank\n", wd);
+                    exit(0);
+                }
+                fscanf(B, "%c", &c);
+                if (c == '}')
+                {
+                    pop(brack);
+                }
+                else
+                {
+                    printf("Unrecognised question terminator {%s%c in place of {end} in question bank\n", wd, c);
+                    exit(0);
+                }
+                pop(part);
+            }
+        }
+
+        if (top(part) == 'q')
+        {
+            fscanf(B, " %c", &c);
+            if (c != '\"')
+            {
+                printf("\" missing before question text; difficulty %f\n", M->diff);
+                exit(0);
+            }
+
+            pos = 0;
+            fscanf(B, "%c", &c);
+            while (c != '\"')
+            {
+                text[pos++] = c;
+                fscanf(B, "%c", &c);
+            }
+            text[pos] = '\0';
+            M->text = (char *)malloc((strlen(text) + 1) * sizeof(char));
+            strcpy(M->text, text);
+
+            fscanf(B, " %c%c", &wd[0], &wd[1]);
+            wd[2] = '\0';
+
+            if (strcmp(wd, "\\\\"))
+            {
+                printf("Unrecognised question/answer delimiter %s in question bank; question \"%s\"\n", wd, M->text);
+                exit(0);
+            }
+
+            fscanf(B, " %c", &ans);
+            M->ans = ans;
+
+            InsertTF(L, M);
+
+            M = init_TF();
+
+            fscanf(B, " %c", &c);
+
+            if (c != '\\')
+            {
+                printf("Unrecognised question terminator %c in question bank; question \"%s\"\n", c, M->text);
+                exit(0);
+            }
+
+            for (int i = 0; i < 3; i++)
+                fscanf(B, "%c", &wd[i]);
+            wd[3] = '\0';
+            if (strcmp(wd, "end"))
+            {
+                printf("Unrecognised question terminator sequence \\%s; question \"%s\"\n", wd, M->text);
+                exit(0);
+            }
+
+            fscanf(B, "%c", &c);
+            if (c == '{')
+            {
+                push(brack, '{');
+                continue;
+            }
+        }
+
+        fscanf(B, " %c", &c);
+    }
+    return L;
+}
+
+ListNUM parse_NUM(FILE *B, Stack part)
+{
+    char c;
+    int ans;
+    char wd[10];
+    char text[50];
+    float diff;
+    int pos;
+    Stack brack = create_empty();
+    ListNUM L = init_NUM();
+    NUM *M = init_NUM();
+
+    fscanf(B, " %c", &c);
+    while (1)
+    {
+        if (c == '\\')
+        {
+            for (int i = 0; i < 3; i++)
+                fscanf(B, "%c", &wd[i]);
+            wd[3] = '\0';
+            if (!strcmp(wd, "end"))
+            {
+                fscanf(B, "%c", &c);
+                if (c == '{')
+                {
+                    push(brack, c);
+                    continue;
+                }
+            }
+            for (int i = 3; i < 5; i++)
+                fscanf(B, "%c", &wd[i]);
+            wd[5] = '\0';
+            if (strcmp(wd, "begin"))
+            {
+                printf("Unrecognised sequence \\%s in question bank\n", wd);
+                exit(0);
+            }
+            fscanf(B, "%c", &c);
+            if (c == '{')
+            {
+                push(brack, c);
+                continue;
+            }
+        }
+
+        if (top(brack) == '{')
+        {
+            if (top(part) == 't')
+            {
+                for (int i = 0; i < 4; i++)
+                    fscanf(B, "%c", &wd[i]);
+                wd[4] = '\0';
+                if (!strcmp(wd, "type"))
+                {
+                    fscanf(B, "%c", &c);
+                    if (c != '}')
+                    {
+                        printf("Unrecognised sequence \\end{%s%c in place of \\end{type} in question bank\n", wd, c);
+                        exit(0);
+                    }
+                    pop(brack);
+                    pop(part);
+                    break;
+                }
+                for (int i = 4; i < 8; i++)
+                    fscanf(B, "%c", &wd[i]);
+                wd[8] = '\0';
+                if (strcmp(wd, "question"))
+                {
+                    printf("Unrecognised part {%s in place of \\begin{question; in question bank\n", wd);
+                    exit(0);
+                }
+                fscanf(B, "%c", &c);
+                if (c != ';')
+                {
+                    printf("Unrecognised difficulty delimiter %c in question bank\n",c);
+                    exit(0);
+                }
+
+                fscanf(B, "%f", &diff);
+                M->diff = diff;
+
+                fscanf(B, "%c", &c);
+                if (c == '}')
+                {
+                    pop(brack);
+                }
+                else
+                {
+                    printf("Difficulty NaN in question bank\n");
+                    exit(0);
+                }
+                push(part, 'q');
+            }
+
+            else if (top(part) == 'q')
+            {
+                for (int i = 0; i < 8; i++)
+                    fscanf(B, "%c", &wd[i]);
+                wd[8] = '\0';
+                if (strcmp(wd, "question"))
+                {
+                    printf("Unrecognised question terminator {%s in place of {end} in question bank\n", wd);
+                    exit(0);
+                }
+                fscanf(B, "%c", &c);
+                if (c == '}')
+                {
+                    pop(brack);
+                }
+                else
+                {
+                    printf("Unrecognised question terminator {%s%c in place of {end} in question bank\n", wd, c);
+                    exit(0);
+                }
+                pop(part);
+            }
+        }
+
+        if (top(part) == 'q')
+        {
+            fscanf(B, " %c", &c);
+            if (c != '\"')
+            {
+                printf("\" missing before question text; difficulty %f\n", M->diff);
+                exit(0);
+            }
+
+            pos = 0;
+            fscanf(B, "%c", &c);
+            while (c != '\"')
+            {
+                text[pos++] = c;
+                fscanf(B, "%c", &c);
+            }
+            text[pos] = '\0';
+            M->text = (char *)malloc((strlen(text) + 1) * sizeof(char));
+            strcpy(M->text, text);
+
+            fscanf(B, " %c%c", &wd[0], &wd[1]);
+            wd[2] = '\0';
+
+            if (strcmp(wd, "\\\\"))
+            {
+                printf("Unrecognised question/answer delimiter %s in question bank; question \"%s\"\n", wd, M->text);
+                exit(0);
+            }
+
+            fscanf(B, " %d", &ans);
+            M->ans = ans;
+
+            InsertNUM(L, M);
+
+            M = init_NUM();
+
+            fscanf(B, " %c", &c);
+
+            if (c != '\\')
+            {
+                printf("Unrecognised question terminator %c in question bank; question \"%s\"\n", c, M->text);
+                exit(0);
+            }
+
+            for (int i = 0; i < 3; i++)
+                fscanf(B, "%c", &wd[i]);
+            wd[3] = '\0';
+            if (strcmp(wd, "end"))
+            {
+                printf("Unrecognised question terminator sequence \\%s; question \"%s\"\n", wd, M->text);
+                exit(0);
+            }
+
+            fscanf(B, "%c", &c);
+            if (c == '{')
+            {
+                push(brack, '{');
+                continue;
+            }
+        }
+
+        fscanf(B, " %c", &c);
+    }
     return L;
 }
 
@@ -684,574 +1263,4 @@ Paper *parse_paper(FILE *P)
     fclose(P);          //Closes file
 
     return pr;
-}
-ListNUM parse_NUM(FILE *B, Stack part)
-{
-    char c;
-    int ans;
-    char wd[10];
-    char text[50];
-    float diff;
-    int pos;
-    Stack brack = create_empty();
-    ListNUM L = init_NUM();
-    NUM *M = init_NUM();
-
-    fscanf(B, " %c", &c);
-    while (1)
-    {
-        if (c == '\\')
-        {
-            for (int i = 0; i < 3; i++)
-                fscanf(B, "%c", &wd[i]);
-            wd[3] = '\0';
-            if (!strcmp(wd, "end"))
-            {
-                fscanf(B, "%c", &c);
-                if (c == '{')
-                {
-                    push(brack, c);
-                    continue;
-                }
-            }
-            for (int i = 3; i < 5; i++)
-                fscanf(B, "%c", &wd[i]);
-            wd[5] = '\0';
-            if (strcmp(wd, "begin"))
-            {
-                printf("Unrecognised sequence \\%s in question bank\n", wd);
-                exit(0);
-            }
-            fscanf(B, "%c", &c);
-            if (c == '{')
-            {
-                push(brack, c);
-                continue;
-            }
-        }
-
-        if (top(brack) == '{')
-        {
-            if (top(part) == 't')
-            {
-                for (int i = 0; i < 4; i++)
-                    fscanf(B, "%c", &wd[i]);
-                wd[4] = '\0';
-                if (!strcmp(wd, "type"))
-                {
-                    fscanf(B, "%c", &c);
-                    if (c != '}')
-                    {
-                        printf("Unrecognised sequence \\end{%s%c in place of \\end{type} in question bank\n", wd, c);
-                        exit(0);
-                    }
-                    pop(brack);
-                    pop(part);
-                    break;
-                }
-                for (int i = 4; i < 8; i++)
-                    fscanf(B, "%c", &wd[i]);
-                wd[8] = '\0';
-                if (strcmp(wd, "question"))
-                {
-                    printf("Unrecognised part {%s in place of \\begin{question; in question bank\n", wd);
-                    exit(0);
-                }
-                fscanf(B, "%c", &c);
-                if (c != ';')
-                {
-                    printf("Unrecognised difficulty delimiter %c in question bank\n",c);
-                    exit(0);
-                }
-
-                fscanf(B, "%f", &diff);
-                M->diff = diff;
-
-                fscanf(B, "%c", &c);
-                if (c == '}')
-                {
-                    pop(brack);
-                }
-                else
-                {
-                    printf("Difficulty NaN in question bank\n");
-                    exit(0);
-                }
-                push(part, 'q');
-            }
-
-            else if (top(part) == 'q')
-            {
-                for (int i = 0; i < 8; i++)
-                    fscanf(B, "%c", &wd[i]);
-                wd[8] = '\0';
-                if (strcmp(wd, "question"))
-                {
-                    printf("Unrecognised question terminator {%s in place of {end} in question bank\n", wd);
-                    exit(0);
-                }
-                fscanf(B, "%c", &c);
-                if (c == '}')
-                {
-                    pop(brack);
-                }
-                else
-                {
-                    printf("Unrecognised question terminator {%s%c in place of {end} in question bank\n", wd, c);
-                    exit(0);
-                }
-                pop(part);
-            }
-        }
-
-        if (top(part) == 'q')
-        {
-            fscanf(B, " %c", &c);
-            if (c != '\"')
-            {
-                printf("\" missing before question text; difficulty %f\n", M->diff);
-                exit(0);
-            }
-
-            pos = 0;
-            fscanf(B, "%c", &c);
-            while (c != '\"')
-            {
-                text[pos++] = c;
-                fscanf(B, "%c", &c);
-            }
-            text[pos] = '\0';
-            M->text = (char *)malloc((strlen(text) + 1) * sizeof(char));
-            strcpy(M->text, text);
-
-            fscanf(B, " %c%c", &wd[0], &wd[1]);
-            wd[2] = '\0';
-
-            if (strcmp(wd, "\\\\"))
-            {
-                printf("Unrecognised question/answer delimiter %s in question bank; question \"%s\"\n", wd, M->text);
-                exit(0);
-            }
-
-            fscanf(B, " %d", &ans);
-            M->ans = ans;
-
-            InsertNUM(L, M);
-
-            M = init_NUM();
-
-            fscanf(B, " %c", &c);
-
-            if (c != '\\')
-            {
-                printf("Unrecognised question terminator %c in question bank; question \"%s\"\n", c, M->text);
-                exit(0);
-            }
-
-            for (int i = 0; i < 3; i++)
-                fscanf(B, "%c", &wd[i]);
-            wd[3] = '\0';
-            if (strcmp(wd, "end"))
-            {
-                printf("Unrecognised question terminator sequence \\%s; question \"%s\"\n", wd, M->text);
-                exit(0);
-            }
-
-            fscanf(B, "%c", &c);
-            if (c == '{')
-            {
-                push(brack, '{');
-                continue;
-            }
-        }
-
-        fscanf(B, " %c", &c);
-    }
-    return L;
-}
-
-ListTF parse_TF(FILE *B, Stack part)
-{
-    char c;
-    char ans;
-    char wd[10];
-    char text[50];
-    float diff;
-    int pos;
-    Stack brack = create_empty();
-    ListTF L = init_TF();
-    TF *M = init_TF();
-
-    fscanf(B, " %c", &c);
-    while (1)
-    {
-        if (c == '\\')
-        {
-            for (int i = 0; i < 3; i++)
-                fscanf(B, "%c", &wd[i]);
-            wd[3] = '\0';
-            if (!strcmp(wd, "end"))
-            {
-                fscanf(B, "%c", &c);
-                if (c == '{')
-                {
-                    push(brack, c);
-                    continue;
-                }
-            }
-            for (int i = 3; i < 5; i++)
-                fscanf(B, "%c", &wd[i]);
-            wd[5] = '\0';
-            if (strcmp(wd, "begin"))
-            {
-                printf("Unrecognised sequence \\%s in question bank\n", wd);
-                exit(0);
-            }
-            fscanf(B, "%c", &c);
-            if (c == '{')
-            {
-                push(brack, c);
-                continue;
-            }
-        }
-
-        if (top(brack) == '{')
-        {
-            if (top(part) == 't')
-            {
-                for (int i = 0; i < 4; i++)
-                    fscanf(B, "%c", &wd[i]);
-                wd[4] = '\0';
-                if (!strcmp(wd, "type"))
-                {
-                    fscanf(B, "%c", &c);
-                    if (c != '}')
-                    {
-                        printf("Unrecognised sequence \\end{%s%c in place of \\end{type} in question bank\n", wd, c);
-                        exit(0);
-                    }
-                    pop(brack);
-                    pop(part);
-                    break;
-                }
-                for (int i = 4; i < 8; i++)
-                    fscanf(B, "%c", &wd[i]);
-                wd[8] = '\0';
-                if (strcmp(wd, "question"))
-                {
-                    printf("Unrecognised part {%s in place of \\begin{question; in question bank\n", wd);
-                    exit(0);
-                }
-                fscanf(B, "%c", &c);
-                if (c != ';')
-                {
-                    printf("Unrecognised difficulty delimiter %c in question bank\n", c);
-                    exit(0);
-                }
-
-                fscanf(B, "%f", &diff);
-                M->diff = diff;
-
-                fscanf(B, "%c", &c);
-                if (c == '}')
-                {
-                    pop(brack);
-                }
-                else
-                {
-                    printf("Difficulty NaN in question bank\n");
-                    exit(0);
-                }
-                push(part, 'q');
-            }
-
-            else if (top(part) == 'q')
-            {
-                for (int i = 0; i < 8; i++)
-                    fscanf(B, "%c", &wd[i]);
-                wd[8] = '\0';
-                if (strcmp(wd, "question"))
-                {
-                    printf("Unrecognised question terminator {%s in place of {end} in question bank\n", wd);
-                    exit(0);
-                }
-                fscanf(B, "%c", &c);
-                if (c == '}')
-                {
-                    pop(brack);
-                }
-                else
-                {
-                    printf("Unrecognised question terminator {%s%c in place of {end} in question bank\n", wd, c);
-                    exit(0);
-                }
-                pop(part);
-            }
-        }
-
-        if (top(part) == 'q')
-        {
-            fscanf(B, " %c", &c);
-            if (c != '\"')
-            {
-                printf("\" missing before question text; difficulty %f\n", M->diff);
-                exit(0);
-            }
-
-            pos = 0;
-            fscanf(B, "%c", &c);
-            while (c != '\"')
-            {
-                text[pos++] = c;
-                fscanf(B, "%c", &c);
-            }
-            text[pos] = '\0';
-            M->text = (char *)malloc((strlen(text) + 1) * sizeof(char));
-            strcpy(M->text, text);
-
-            fscanf(B, " %c%c", &wd[0], &wd[1]);
-            wd[2] = '\0';
-
-            if (strcmp(wd, "\\\\"))
-            {
-                printf("Unrecognised question/answer delimiter %s in question bank; question \"%s\"\n", wd, M->text);
-                exit(0);
-            }
-
-            fscanf(B, " %c", &ans);
-            M->ans = ans;
-
-            InsertTF(L, M);
-
-            M = init_TF();
-
-            fscanf(B, " %c", &c);
-
-            if (c != '\\')
-            {
-                printf("Unrecognised question terminator %c in question bank; question \"%s\"\n", c, M->text);
-                exit(0);
-            }
-
-            for (int i = 0; i < 3; i++)
-                fscanf(B, "%c", &wd[i]);
-            wd[3] = '\0';
-            if (strcmp(wd, "end"))
-            {
-                printf("Unrecognised question terminator sequence \\%s; question \"%s\"\n", wd, M->text);
-                exit(0);
-            }
-
-            fscanf(B, "%c", &c);
-            if (c == '{')
-            {
-                push(brack, '{');
-                continue;
-            }
-        }
-
-        fscanf(B, " %c", &c);
-    }
-    return L;
-}
-
-ListFITB parse_FITB(FILE *B, Stack part)
-{
-    char c;
-    char *ans;
-    char wd[10];
-    char text[50];
-    float diff;
-    int pos;
-    Stack brack = create_empty();
-    ListFITB L = init_FITB();
-    FITB *M = init_FITB();
-
-    fscanf(B, " %c", &c);
-    while (1)
-    {
-        if (c == '\\')
-        {
-            for (int i = 0; i < 3; i++)
-                fscanf(B, "%c", &wd[i]);
-            wd[3] = '\0';
-            if (!strcmp(wd, "end"))
-            {
-                fscanf(B, "%c", &c);
-                if (c == '{')
-                {
-                    push(brack, c);
-                    continue;
-                }
-            }
-            for (int i = 3; i < 5; i++)
-                fscanf(B, "%c", &wd[i]);
-            wd[5] = '\0';
-            if (strcmp(wd, "begin"))
-            {
-                printf("Unrecognised sequence \\%s in question bank\n", wd);
-                exit(0);
-            }
-            fscanf(B, "%c", &c);
-            if (c == '{')
-            {
-                push(brack, c);
-                continue;
-            }
-        }
-
-        if (top(brack) == '{')
-        {
-            if (top(part) == 't')
-            {
-                for (int i = 0; i < 4; i++)
-                    fscanf(B, "%c", &wd[i]);
-                wd[4] = '\0';
-                if (!strcmp(wd, "type"))
-                {
-                    fscanf(B, "%c", &c);
-                    if (c != '}')
-                    {
-                        printf("Unrecognised sequence \\end{%s%c in place of \\end{type} in question bank\n", wd, c);
-                        exit(0);
-                    }
-                    pop(brack);
-                    pop(part);
-                    break;
-                }
-                for (int i = 4; i < 8; i++)
-                    fscanf(B, "%c", &wd[i]);
-                wd[8] = '\0';
-                if (strcmp(wd, "question"))
-                {
-                    printf("Unrecognised part {%s in place of \\begin{question; in question bank\n", wd);
-                    exit(0);
-                }
-                fscanf(B, "%c", &c);
-                if (c != ';')
-                {
-                    printf("Unrecognised difficulty delimiter %c in question bank\n", c);
-                    exit(0);
-                }
-
-                fscanf(B, "%f", &diff);
-                M->diff = diff;
-
-                fscanf(B, "%c", &c);
-                if (c == '}')
-                {
-                    pop(brack);
-                }
-                else
-                {
-                    printf("Difficulty NaN in question bank\n");
-                    exit(0);
-                }
-                push(part, 'q');
-            }
-
-            else if (top(part) == 'q')
-            {
-                for (int i = 0; i < 8; i++)
-                    fscanf(B, "%c", &wd[i]);
-                wd[8] = '\0';
-                if (strcmp(wd, "question"))
-                {
-                    printf("Unrecognised question terminator {%s in place of {end} in question bank\n", wd);
-                    exit(0);
-                }
-                fscanf(B, "%c", &c);
-                if (c == '}')
-                {
-                    pop(brack);
-                }
-                else
-                {
-                    printf("Unrecognised question terminator {%s%c in place of {end} in question bank\n", wd, c);
-                    exit(0);
-                }
-                pop(part);
-            }
-        }
-
-        if (top(part) == 'q')
-        {
-            fscanf(B, " %c", &c);
-            if (c != '\"')
-            {
-                printf("\" missing before question text; difficulty %f\n", M->diff);
-                exit(0);
-            }
-
-            pos = 0;
-            fscanf(B, "%c", &c);
-            while (c != '\"')
-            {
-                text[pos++] = c;
-                fscanf(B, "%c", &c);
-            }
-            text[pos] = '\0';
-            M->text = (char *)malloc((strlen(text) + 1) * sizeof(char));
-            strcpy(M->text, text);
-
-            fscanf(B, " %c%c", &wd[0], &wd[1]);
-            wd[2] = '\0';
-
-            if (strcmp(wd, "\\\\"))
-            {
-                printf("Unrecognised question/answer delimiter %s in question bank; question \"%s\"\n", wd, M->text);
-                exit(0);
-            }
-
-            fscanf(B, " %c", &c);
-            if (c != '\"')
-            {
-                printf("\" missing before answer in question bank; question \"%s\"\n", M->text);
-                exit(0);
-            }
-
-            pos = 0;
-            fscanf(B, "%c", &c);
-            while (c != '\"')
-            {
-                text[pos++] = c;
-                fscanf(B, "%c", &c);
-            }
-            text[pos] = '\0';
-            M->ans = (char *)malloc((strlen(text) + 1) * sizeof(char));
-            strcpy(M->ans, text);
-
-            InsertFITB(L, M);
-
-            M = init_FITB();
-
-            fscanf(B, " %c", &c);
-
-            if (c != '\\')
-            {
-                printf("Unrecognised question terminator %c in question bank; question \"%s\"\n", c, M->text);
-                exit(0);
-            }
-
-            for (int i = 0; i < 3; i++)
-                fscanf(B, "%c", &wd[i]);
-            wd[3] = '\0';
-            if (strcmp(wd, "end"))
-            {
-                printf("Unrecognised question terminator sequence \\%s; question \"%s\"\n", wd, M->text);
-                exit(0);
-            }
-
-            fscanf(B, "%c", &c);
-            if (c == '{')
-            {
-                push(brack, '{');
-                continue;
-            }
-        }
-
-        fscanf(B, " %c", &c);
-    }
-
-    return L;
 }

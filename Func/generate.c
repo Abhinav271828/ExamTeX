@@ -54,9 +54,9 @@ void select_MCQ(FILE *op, MCQ **possible, int found, int no_req, int no_ops)
         found--;
     }
     fprintf(op, "MCQ with %d options:\n", no_ops);      //Section heading
-    for (int i = 0; i < found; i++)                 //Prints each
-    {                                               //question and
-        fprintf(op, "%d) ", i + 1);                 //its options
+    for (int i = 0; i < found; i++)                     //Prints each
+    {                                                   //question and
+        fprintf(op, "%d) ", i + 1);                     //its options
         fileput_MCQ(op, possible[i], no_ops);       
     }
     fprintf(op, "--------------------\n");              //End of section
@@ -104,7 +104,7 @@ void find_FITB(FILE *op, Paper *P, Bank *B)
     {                                                                                       //list and add suitable
         if (trav->diff >= P->fitb_reqs->diff_lb && trav->diff <= P->fitb_reqs->diff_ub)     //questions to array using
         {                                                                                   //realloc; "found" stores
-            possible = (FITB **)realloc(possible, (found + 1) * sizeof(FITB *));                                                                                       //total number found
+            possible = (FITB **)realloc(possible, (found + 1) * sizeof(FITB *));            //total number found
             possible[found++] = trav;
         }
 
@@ -134,9 +134,9 @@ void select_FITB(FILE *op, FITB **possible, int found, int no_req)
         found--;
     }
     fprintf(op, "FITB:\n");                         //Section heading
-    for (int i = 0; i < found; i++)             //Prints
-    {                                           //each
-        fprintf(op, "%d) ", i + 1);             //question
+    for (int i = 0; i < found; i++)                 //Prints
+    {                                               //each
+        fprintf(op, "%d) ", i + 1);                 //question
         fileput_FITB(op, possible[i]);
     }
     fprintf(op, "--------------------\n");          //End of section
@@ -193,9 +193,9 @@ void select_TF(FILE *op, TF **possible, int found, int no_req)
         found--;
     }
     fprintf(op, "TF:\n");                           //Section heading
-    for (int i = 0; i < found; i++)         //Prints
-    {                                       //each
-        fprintf(op, "%d) ", i + 1);         //question
+    for (int i = 0; i < found; i++)                 //Prints
+    {                                               //each
+        fprintf(op, "%d) ", i + 1);                 //question
         fileput_TF(op, possible[i]);
     }
     fprintf(op, "--------------------\n");          //End of section
@@ -251,9 +251,9 @@ void select_NUM(FILE *op, NUM **possible, int found, int no_req)
         found--;
     }
     fprintf(op, "NUM:\n");                          //Section heading
-    for (int i = 0; i < found; i++)         //Prints
-    {                                       //each
-        fprintf(op, "%d) ", i + 1);         //question
+    for (int i = 0; i < found; i++)                 //Prints
+    {                                               //each
+        fprintf(op, "%d) ", i + 1);                 //question
         fileput_NUM(op, possible[i]);
     }
     fprintf(op, "--------------------\n");          //End of section
