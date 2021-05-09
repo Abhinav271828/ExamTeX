@@ -68,6 +68,60 @@ int main(void)
     // be added in the Output file
     find_NUM(op, P, B);
 
+    free(B);
+    free(P);
     // Closes the Output file
     fclose(op);
+
+    MCQ* trav1 = B->mcq_list;
+    MCQ* temp1;
+    while (trav1->next != NULL)
+    {
+        temp1 = trav1->next;
+        trav1->next = trav1->next->next;
+        free(temp1->text);
+        for (int i = 0; i < temp1->no_corr ; i++) free(temp1->corr[i]);
+        for (int i = 0; i < temp1->no_ops - temp1->no_corr;i++) free(temp1->wrong[i]);
+        free(temp1);
+    }
+    free(trav1);
+
+    FITB* trav2 = B->fitb_list;
+    FITB* temp2;
+    while (trav2->next != NULL)
+    {
+        temp2 = trav2->next;
+        trav2->next = trav2->next->next;
+        free(temp2->text);
+        free(temp2);
+    }
+    free(trav2);
+
+    TF* trav3 = B->tf_list;
+    TF* temp3;
+    while (trav3->next != NULL)
+    {
+        temp3 = trav3->next;
+        trav3->next = trav3->next->next;
+        free(temp3->text);
+        free(temp3);
+    }
+    free(trav3);
+
+    NUM* trav4 = B->num_list;
+    NUM* temp4;
+    while (trav4->next != NULL)
+    {
+        temp4 = trav4->next;
+        trav4->next = trav4->next->next;
+        free(temp4->text);
+        free(temp4);
+    }
+    free(trav4);
+
+    for (int i = 0; i < 10; i++)
+        free(P->mcq_reqs[i]);
+    free(P->fitb_reqs);
+    free(P->tf_reqs);
+
 }

@@ -13,6 +13,8 @@ MCQ *create_MCQ(char *text, float diff)
     P->next = NULL;
 
     return P;
+    free(P);
+    free(P->text);
 }
 
 // Gives values for the 
@@ -21,6 +23,7 @@ MCQ *init_MCQ()
 {
     MCQ *P = create_MCQ("", 0.0f);
     return P;
+    free(P);
 }
 
 // Helps in creating an empty
@@ -37,6 +40,9 @@ FITB *create_FITB(char *text, char *ans, float diff)
     P->next = NULL;
 
     return P;
+    free(P);
+    free(P->text);
+    free(P->ans);
 }
 
 // Gives values for the 
@@ -45,6 +51,7 @@ FITB *init_FITB()
 {
     FITB *P = create_FITB("", "", 0.0f);
     return P;
+    free(P);
 }
 
 // Helps in creating an empty
@@ -52,7 +59,7 @@ FITB *init_FITB()
 TF *create_TF(char *text, char ans, float diff)
 {
     TF *P = (TF *)malloc(sizeof(TF));
-    P->text = (char *)malloc(sizeof(MCQ));
+    P->text = (char *)malloc(sizeof(TF));
     strcpy(P->text, text);
     P->ans = ans;
     P->diff = diff;
@@ -60,6 +67,8 @@ TF *create_TF(char *text, char ans, float diff)
     P->next = NULL;
 
     return P;
+    free(P);
+    free(P->text);
 }
 
 // Gives values for the 
@@ -68,6 +77,7 @@ TF *init_TF()
 {
     TF *P = create_TF("", ' ', 0.0f);
     return P;
+    free(P);
 }
 
 // Helps in creating an empty
@@ -75,7 +85,7 @@ TF *init_TF()
 NUM *create_NUM(char *text, int ans, float diff)
 {
     NUM *P = (NUM *)malloc(sizeof(NUM));
-    P->text = (char *)malloc(sizeof(MCQ));
+    P->text = (char *)malloc(sizeof(NUM));
     strcpy(P->text, text);
     P->ans = ans;
     P->diff = diff;
@@ -83,6 +93,8 @@ NUM *create_NUM(char *text, int ans, float diff)
     P->next = NULL;
 
     return P;
+    free(P);
+    free(P->text);
 }
 
 // Gives values for the 
@@ -91,6 +103,7 @@ NUM *init_NUM()
 {
     NUM *P = create_NUM("", 0, 0.0f);
     return P;
+    free(P);
 }
 
 // Initialises all the
@@ -104,6 +117,7 @@ Bank *init_bank()
     B->num_list = init_NUM();
 
     return B;
+    free(B);
 }
 
 // Intialisation of
@@ -117,6 +131,7 @@ Request *init_request()
     R->diff_ub = 0.0f;
 
     return R;
+    free(R);
 }
 
 // Initialses all of the different 
@@ -135,4 +150,5 @@ Paper *init_paper()
     P->num_reqs = init_request();
 
     return P;
+    free(P);
 }

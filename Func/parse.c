@@ -85,7 +85,8 @@ Bank *parse_bank(FILE *B)
     }
 
     fclose(B);                      //Closes file
-
+    free(part);
+    free(brack);
     return bk;
 }
 
@@ -358,7 +359,8 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
 
         fscanf(B, " %c", &c);   // will read the "\" before begin or end
     }
-
+    free(M);
+    free(brack);
     return L;
 }
 
@@ -559,7 +561,8 @@ ListFITB parse_FITB(FILE *B, Stack part)
 
         fscanf(B, " %c", &c);               // will read the "\" before begin or end
     }
-
+    free(M);
+    free(brack);
     return L;
 }
 
@@ -745,6 +748,8 @@ ListTF parse_TF(FILE *B, Stack part)
 
         fscanf(B, " %c", &c);                       // will read the "\" before begin or end
     }
+    free(M);
+    free(brack);
     return L;
 }
 
@@ -930,6 +935,8 @@ ListNUM parse_NUM(FILE *B, Stack part)
 
         fscanf(B, " %c", &c);                       // will read the "\" before begin or end
     }
+    free(M);
+    free(brack);
     return L;
 }
 

@@ -24,6 +24,7 @@ Stack create_empty()
     temp->part = ' ';
     temp->next = NULL;
     return temp;
+    free(temp);
 }
 
 // Helps in pushing a value on the stack
@@ -35,6 +36,7 @@ PtrToNode create_node(char val)
     val1->part = val;
     val1->next = NULL;
     return val1;
+    free(val1);
 }
 
 // Tells the top-most value on the stack

@@ -37,6 +37,7 @@ void find_MCQ(FILE *op, Paper *P, Bank *B)
         else
         {
             select_MCQ(op, possible, found, no_req, no_ops);
+            free(possible);
             printf("MCQs found and added!\n");
         }
     }
@@ -166,6 +167,7 @@ void find_FITB(FILE *op, Paper *P, Bank *B)
     else
     {
         select_FITB(op, possible, found, no_req);
+        free(possible);
         printf("FITBs found and added!\n");
     }
 }
@@ -225,6 +227,7 @@ void find_TF(FILE *op, Paper *P, Bank *B)
     else
     {
         select_TF(op, possible, found, no_req);
+        free(possible);
         printf("TFs found and added!\n");
     }
 }
@@ -283,6 +286,7 @@ void find_NUM(FILE *op, Paper *P, Bank *B)
     else
     {
         select_NUM(op, possible, found, no_req);
+        free(possible);
         printf("NUMs found and added!\n");
     }
 }
