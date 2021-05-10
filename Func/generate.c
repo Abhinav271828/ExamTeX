@@ -40,8 +40,6 @@ void find_MCQ(FILE *op, Paper *P, Bank *B)
             printf("MCQs found and added!\n");
         }
     }
-    for (int i = 0; i < found; i++)
-        freeMCQ(possible[i]);
 }
 
 void select_MCQ(FILE *op, MCQ **possible, int found, int no_req, int no_ops)
@@ -170,8 +168,6 @@ void find_FITB(FILE *op, Paper *P, Bank *B)
         select_FITB(op, possible, found, no_req);
         printf("FITBs found and added!\n");
     }
-    for (int i = 0; i < found; i++)
-        freeFITB(possible[i]);
 }
 
 void select_FITB(FILE *op, FITB **possible, int found, int no_req)
@@ -231,8 +227,6 @@ void find_TF(FILE *op, Paper *P, Bank *B)
         select_TF(op, possible, found, no_req);
         printf("TFs found and added!\n");
     }
-    for (int i = 0; i < found; i++)
-        freeTF(possible[i]);
 }
 
 void select_TF(FILE *op, TF **possible, int found, int no_req)
@@ -291,8 +285,6 @@ void find_NUM(FILE *op, Paper *P, Bank *B)
         select_NUM(op, possible, found, no_req);
         printf("NUMs found and added!\n");
     }
-    for (int i = 0; i < found; i++)
-        freeNUM(possible[i]);
 }
 
 void select_NUM(FILE *op, NUM **possible, int found, int no_req)

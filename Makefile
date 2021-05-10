@@ -8,7 +8,7 @@ DEPS_1 = $(IDIR)/structs.h $(IDIR)/functions.h
 DEPS_2 = $(IDIR)/stack.h
 DEPS = $(IDIR)/*.h
 
-a.out: $(ODIR)/main.o $(ODIR)/generate.o $(ODIR)/init.o $(ODIR)/insert.o $(ODIR)/stack.o $(ODIR)/parse.o 
+a.out: $(ODIR)/main.o $(ODIR)/generate.o $(ODIR)/init.o $(ODIR)/insert.o $(ODIR)/stack.o $(ODIR)/parse.o $(ODIR)/free.o
 	$(CC) -o $@ $^
 
 $(ODIR)/main.o: main.c
@@ -27,4 +27,7 @@ $(ODIR)/stack.o: $(SDIR)/stack.c $(DEPS_2)
 	$(CC) -c -o $@ $<
 
 $(ODIR)/parse.o: $(SDIR)/parse.c $(DEPS)
+	$(CC) -c -o $@ $<
+
+$(ODIR)/free.o: $(SDIR)/free.c $(DEPS)
 	$(CC) -c -o $@ $<

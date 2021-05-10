@@ -359,8 +359,6 @@ ListMCQ parse_MCQ(FILE *B, Stack part)
         fscanf(B, " %c", &c);   // will read the "\" before begin or end
     }
 
-    freeMCQ(M);
-
     return L;
 }
 
@@ -561,9 +559,6 @@ ListFITB parse_FITB(FILE *B, Stack part)
 
         fscanf(B, " %c", &c);               // will read the "\" before begin or end
     }
-
-    freeFITB(M);
-
     return L;
 }
 
@@ -750,8 +745,6 @@ ListTF parse_TF(FILE *B, Stack part)
         fscanf(B, " %c", &c);                       // will read the "\" before begin or end
     }
 
-    freeTF(M);
-
     return L;
 }
 
@@ -937,8 +930,6 @@ ListNUM parse_NUM(FILE *B, Stack part)
 
         fscanf(B, " %c", &c);                       // will read the "\" before begin or end
     }
-    
-    freeNUM(M);
 
     return L;
 }

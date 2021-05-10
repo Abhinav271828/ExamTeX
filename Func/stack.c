@@ -12,7 +12,7 @@ void push(Stack S, char val)
 char pop(Stack S)
 {
     PtrToNode temp = S->next;
-    c = temp->val;
+    char c = temp->part;
     S->next = temp->next;
     free(temp);
     return c;
