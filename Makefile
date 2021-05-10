@@ -31,3 +31,9 @@ $(ODIR)/stack.o: $(SDIR)/stack.c $(DEPS_2)
 
 $(ODIR)/parse.o: $(SDIR)/parse.c $(DEPS)
 	$(CC) -c -o $@ $<
+
+.PHONY = clean
+
+clean:
+	rm -f ./Func/Obj/*.o ./a.out *.txt
+
