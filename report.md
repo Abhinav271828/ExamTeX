@@ -30,7 +30,7 @@ Once the paper is opened, the characters are read one by one. If a character is 
 The last bracket is the difficulty range; this begins with the sequence `diff in `, followed by the lower and upper bounds separated by a comma, and a closing bracket. Then the next request is read and parsed.  
 
 ### Output File Generation
-For each request, the bank is filtered into an array of questions satisfying the conditions, keeping track of the number. If the total is less than the number requested, nothing of the type is printed; else, the requested number is randomly selected from the array. Then each question is printed.  
+For each request, the bank is filtered into an array of questions satisfying the conditions, keeping track of the number. If the total is less than the number requested, nothing of the type is printed; otherwise, the requested number is randomly selected from the array. Then each question is printed.  
 In case of MCQs, the selection as well as the order of correct and wrong options is randomised.  
 
 ## Future Versions
@@ -62,5 +62,11 @@ For each type, these were the functions made:
 * finding (`find_type()`) 
 * selection (`select_type()`)
 * printing (`fileput_type()`).
+
+The stack functions were also split among the members:  
+* `push()` and `top()`: Abhinav  
+* `create_node()`: Tarun  
+* `create_empty()`: Sreya  
+* `pop()`: Nukit  
 
 `main()`, `parse_bank()` and `parse_paper()` were written by Nukit and Abhinav.
