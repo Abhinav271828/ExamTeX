@@ -70,4 +70,7 @@ int main(void)
 
     // Closes the Output file
     fclose(op);
+
+    freeBank(B);
+    freePaper(P);
 }

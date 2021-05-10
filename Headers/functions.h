@@ -8,7 +8,7 @@
 #include "stack.h"
 #include "structs.h"
 
-//Header file declaring functions
+// Header file declaring functions
 
 //Initialisation
 Bank *init_bank();
@@ -54,5 +54,13 @@ void InsertMCQ(ListMCQ L, MCQ *X);
 void InsertFITB(ListFITB L, FITB *X);
 void InsertTF(ListTF L, TF *X);
 void InsertNUM(ListNUM L, NUM *X);
+
+// Freeing memory
+void freeMCQ(MCQ *M);
+void freeFITB(FITB *F);
+void freeTF(TF *T);
+void freeNUM(NUM *N);
+void freeBank(Bank *B);
+void freePaper(Paper *P);
 
 #endif

@@ -11,8 +11,10 @@ void push(Stack S, char val)
 // Pops a value off the stack
 char pop(Stack S)
 {
-    char c = S->next->part;
-    S->next = S->next->next;
+    PtrToNode temp = S->next;
+    c = temp->val;
+    S->next = temp->next;
+    free(temp);
     return c;
 }
 
