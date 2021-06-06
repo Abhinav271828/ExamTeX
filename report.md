@@ -38,7 +38,7 @@ Some features that can be added to this project in the future are:
 * Marks file  
     Since the correct answer to each question is stored in the bank, answer sheets (in a certain format) can be parsed and graded. According to the percentage of students who got a certain question correct, that questions difficulty "score" can be updated. Based on this score and the predicted difficulty, a new difficulty can be calculated.   
     
-* Line numbers
+* Line numbers. 
     The position of syntax errors in the bank and paper files can be made more clear by displaying the line number. In C, this means counting the number of newline characters until the position of the error.   
     
 * Appending questions to output file  
